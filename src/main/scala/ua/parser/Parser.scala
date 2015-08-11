@@ -16,6 +16,7 @@ case class Parser(userAgentParser: UserAgentParser, osParser: OSParser, devicePa
 }
 
 object Parser {
+
   def create(source: InputStream) = {
     val yaml = new Yaml(new SafeConstructor)
     val javaConfig = yaml.load(source).asInstanceOf[JMap[String, JList[JMap[String, String]]]]

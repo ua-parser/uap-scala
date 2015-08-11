@@ -7,9 +7,8 @@ case class OS(family: String, major: Option[String] = None, minor: Option[String
               patchMinor: Option[String] = None)
 
 object OS {
-  private[parser] def fromMap(m: Map[String, String]) = m.get("family").map { family =>
-    OS(family, m.get("major"), m.get("minor"), m.get("patch"), m.get("patch_minor"))
-  }
+  private[parser] def fromMap(m: Map[String, String]) =
+    Option(OS(m("family"), m.get("major"), m.get("minor"), m.get("patch"), m.get("patch_minor")))
 
   private[parser] case class OSPattern(pattern: Pattern, osReplacement: Option[String], v1Replacement: Option[String],
                                v2Replacement: Option[String]) {
