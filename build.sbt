@@ -2,7 +2,7 @@ name := "uap-scala"
 
 version := "1.0-SNAPSHOT"
 
-scalaVersion := "2.11.4"
+scalaVersion := "2.10.5"
 
 libraryDependencies ++= Seq(
   "org.yaml" % "snakeyaml" % "1.10",
