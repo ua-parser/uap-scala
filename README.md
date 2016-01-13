@@ -1,4 +1,4 @@
-UA Parser Scala Library
+# UA Parser Scala Library
 ======================
 
 This is the Scala implementation of [ua-parser](https://github.com/tobie/ua-parser).
@@ -6,7 +6,7 @@ The implementation uses the shared regex patterns and overrides from regexes.yam
 
 [![Build Status](https://travis-ci.org/ua-parser/uap-scala.png?branch=master)](https://travis-ci.org/ua-parser/uap-scala)
 
-Build:
+## Build:
 ------
 
     sbt package
@@ -22,7 +22,10 @@ import ua.parser.Parser
 }
 ```
 
-Author:
+## Possible Gotcha
+Don't forget to include **regexes.yaml** from https://github.com/ua-parser/uap-core/blob/master/regexes.yaml in your **ressources** folder of your project.
+
+## Author:
 -------
 
   * Piotr Adamski [@mcveat](https://twitter.com/mcveat)
