@@ -7,9 +7,8 @@ case class UserAgent(family: String, major: Option[String] = None, minor: Option
                      patch: Option[String] = None)
 
 object UserAgent {
-  private[parser] def fromMap(m: Map[String, String]) = m.get("family").map { family =>
-    UserAgent(family, m.get("major"), m.get("minor"), m.get("patch"))
-  }
+  private[parser] def fromMap(m: Map[String, String]) =
+    Option(UserAgent(m("family"), m.get("major"), m.get("minor"), m.get("patch")))
 
   private[parser] case class UserAgentPattern(pattern: Pattern, familyReplacement: Option[String],
                                       v1Replacement: Option[String], v2Replacement: Option[String]) {
