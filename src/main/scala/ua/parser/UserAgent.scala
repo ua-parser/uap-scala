@@ -1,10 +1,10 @@
 package ua.parser
 
-import java.util.regex.{Matcher, Pattern}
+import java.util.regex.{ Matcher, Pattern }
 import MatcherOps._
 
 case class UserAgent(family: String, major: Option[String] = None, minor: Option[String] = None,
-                     patch: Option[String] = None)
+  patch: Option[String] = None)
 
 object UserAgent {
   private[parser] def fromMap(m: Map[String, String]) = m.get("family").map { family =>
@@ -12,7 +12,7 @@ object UserAgent {
   }
 
   private[parser] case class UserAgentPattern(pattern: Pattern, familyReplacement: Option[String],
-                                      v1Replacement: Option[String], v2Replacement: Option[String]) {
+      v1Replacement: Option[String], v2Replacement: Option[String]) {
     def process(agent: String): Option[UserAgent] = {
       val matcher = pattern.matcher(agent)
       if (!matcher.find()) return None
