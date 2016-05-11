@@ -1,0 +1,20 @@
+box: hseeberger/scala-sbt
+build:
+  steps:
+    - script:
+        name: install git
+        code: |
+          apt-get update && apt-get install git
+    - script:
+        name: run tests and publish if needed
+        code: |
+          sbt coverage test
+deploy:
+  steps:
+    - script:
+      name: publish artifacts
+      code: |
+        export PGP_SECRET_RING_PATH=$(mktemp -d)/secring.asc
+        echo "${PGP_SECRET}" | base64 --decode > "${PGP_SECRET_RING_PATH}"
+        echo "${PGP_PASS}" | sbt publish-signed
+
