@@ -1,7 +1,10 @@
 package ua.parser
 
-import java.util.regex.{Matcher, Pattern}
+import java.util.regex.{ Matcher, Pattern }
+
 import MatcherOps._
+
+import scala.annotation.tailrec
 
 case class Device(family: String)
 
@@ -13,8 +16,16 @@ object Device {
       val matcher = pattern.matcher(agent)
       if (!matcher.find()) return None
       familyReplacement.map { replacement =>
-        if (replacement.contains("$1") && matcher.groupCount() >= 1)  {
-          replacement.replaceFirst("\\$1", Matcher.quoteReplacement(matcher.group(1)))
+        if (replacement.contains("$") && matcher.groupCount() >= 1)  {
+          @tailrec
+          def replace(i: Int, replaced: String): String = {
+            if (i < 1) replaced
+            else {
+              val matched = if (matcher.group(i) == null) "" else matcher.group(i)
+              replace(i - 1, replaced.replaceAll(s"\\$$$i", Matcher.quoteReplacement(matched)))
+            }
+          }
+          replace(matcher.groupCount, replacement).trim
         } else replacement
       }.orElse(matcher.groupAt(1)).map(Device(_))
     }
@@ -22,7 +33,8 @@ object Device {
 
   private object DevicePattern {
     def fromMap(m: Map[String, String]) = m.get("regex").map { r =>
-      DevicePattern(Pattern.compile(r), m.get("device_replacement"))
+      val flag = if (m.get("regex_flag").getOrElse("") == "i") Pattern.CASE_INSENSITIVE else 0
+      DevicePattern(Pattern.compile(r, flag), m.get("device_replacement"))
     }
   }
 
@@ -34,6 +46,6 @@ object Device {
   }
 
   object DeviceParser {
-    def fromList(config: List[Map[String, String]]) = DeviceParser(config.map(DevicePattern.fromMap).flatten)
+    def fromList(config: List[Map[String, String]]) = DeviceParser(config.flatMap(DevicePattern.fromMap))
   }
 }

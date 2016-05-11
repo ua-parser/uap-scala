@@ -37,13 +37,15 @@ object UserAgent {
   }
 
   case class UserAgentParser(patterns: List[UserAgentPattern]) {
-    def parse(agent: String) = patterns.foldLeft[Option[UserAgent]](None) {
-      case (None, pattern) => pattern.process(agent)
-      case (result, _) => result
-    }.getOrElse(UserAgent("Other"))
+    def parse(agent: String) = {
+      patterns.foldLeft[Option[UserAgent]](None) {
+        case (None, pattern) => pattern.process(agent)
+        case (result, _) => result
+      }.getOrElse(UserAgent("Other"))
+    }
   }
 
   object UserAgentParser {
-    def fromList(config: List[Map[String, String]]) = UserAgentParser(config.map(UserAgentPattern.fromMap).flatten)
+    def fromList(config: List[Map[String, String]]) = UserAgentParser(config.flatMap(UserAgentPattern.fromMap))
   }
 }
