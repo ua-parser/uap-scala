@@ -5,7 +5,7 @@ import java.nio.charset.StandardCharsets
 
 import org.specs2.mutable.Specification
 import org.yaml.snakeyaml.Yaml
-import java.util.{ Map => JMap, List => JList}
+import java.util.{ Map => JMap, List => JList }
 import scala.collection.JavaConverters._
 
 trait ParserSpecBase extends Specification {
@@ -23,8 +23,9 @@ trait ParserSpecBase extends Specification {
         "Mozilla/5.0 (iPhone; CPU iPhone OS 5_1_1 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9B206 Safari/7534.48.3" ->
           Client(UserAgent("Mobile Safari", Some("5"), Some("1")), OS("iOS", Some("5"), Some("1"), Some("1")), Device("iPhone"))
       )
-      cases.map { case (agent, expected) =>
-        parser.parse(agent) must beEqualTo(expected)
+      cases.map {
+        case (agent, expected) =>
+          parser.parse(agent) must beEqualTo(expected)
       }
     }
 
@@ -52,10 +53,10 @@ trait ParserSpecBase extends Specification {
     "properly parse user agents" in {
       List("/tests/test_ua.yaml", "/test_resources/firefox_user_agent_strings.yaml",
         "/test_resources/pgts_browser_list.yaml").map { file =>
-        readCasesConfig(file).map { c =>
-          parser.parse(c("user_agent_string")).userAgent must beEqualTo(UserAgent.fromMap(c).get)
-        }
-      }.flatten
+          readCasesConfig(file).map { c =>
+            parser.parse(c("user_agent_string")).userAgent must beEqualTo(UserAgent.fromMap(c).get)
+          }
+        }.flatten
     }
 
     "properly parse os" in {
