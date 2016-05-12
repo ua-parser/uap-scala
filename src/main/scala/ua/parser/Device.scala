@@ -16,7 +16,7 @@ object Device {
       val matcher = pattern.matcher(agent)
       if (!matcher.find()) return None
       familyReplacement.map { replacement =>
-        if (replacement.contains("$") && matcher.groupCount() >= 1)  {
+        if (replacement.contains("$") && matcher.groupCount() >= 1) {
           @tailrec
           def replace(i: Int, replaced: String): String = {
             if (i < 1) replaced

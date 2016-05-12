@@ -4,7 +4,7 @@ import java.util.regex.Pattern
 import MatcherOps._
 
 case class OS(family: String, major: Option[String] = None, minor: Option[String] = None, patch: Option[String] = None,
-              patchMinor: Option[String] = None)
+  patchMinor: Option[String] = None)
 
 object OS {
   private[parser] def fromMap(m: Map[String, String]) = m.get("family").map { family =>
@@ -12,8 +12,8 @@ object OS {
   }
 
   private[parser] case class OSPattern(pattern: Pattern, osReplacement: Option[String], v1Replacement: Option[String],
-                               v2Replacement: Option[String], v3Replacement: Option[String],
-                               v4Replacement: Option[String]) {
+      v2Replacement: Option[String], v3Replacement: Option[String],
+      v4Replacement: Option[String]) {
     def process(agent: String): Option[OS] = {
       val matcher = pattern.matcher(agent)
       if (!matcher.find()) return None
@@ -34,7 +34,7 @@ object OS {
   private object OSPattern {
     def fromMap(m: Map[String, String]) = m.get("regex").map { r =>
       OSPattern(Pattern.compile(r), m.get("os_replacement"), m.get("os_v1_replacement"), m.get("os_v2_replacement"),
-      m.get("os_v3_replacement"), m.get("os_v4_replacement"))
+        m.get("os_v3_replacement"), m.get("os_v4_replacement"))
     }
   }
 
