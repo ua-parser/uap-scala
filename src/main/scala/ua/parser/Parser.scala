@@ -8,7 +8,7 @@ import ua.parser.Device.DeviceParser
 import ua.parser.OS.OSParser
 import ua.parser.UserAgent.UserAgentParser
 import scala.collection.JavaConverters._
-import java.util.{Map => JMap, List => JList}
+import java.util.{ Map => JMap, List => JList }
 
 case class Parser(userAgentParser: UserAgentParser, osParser: OSParser, deviceParser: DeviceParser)
     extends UserAgentStringParser {
@@ -20,7 +20,7 @@ object Parser {
     val yaml = new Yaml(new SafeConstructor)
     val javaConfig = yaml.load(source).asInstanceOf[JMap[String, JList[JMap[String, String]]]]
     val config = javaConfig.asScala.toMap.mapValues(_.asScala.toList.map(_.asScala.toMap.filterNot {
-      case (_ , value) => value == null
+      case (_, value) => value == null
     }))
     val userAgentParser = UserAgentParser.fromList(config.getOrElse("user_agent_parsers", List()))
     val osParser = OSParser.fromList(config.getOrElse("os_parsers", List()))
