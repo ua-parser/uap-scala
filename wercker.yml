@@ -13,7 +13,7 @@ build:
       name: run tests and publish if needed
       code: |
         sbt coverage test
-deploy:
+publish-snapshot:
   steps:
     - script:
       name: publish artifacts
