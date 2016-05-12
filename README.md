@@ -4,7 +4,7 @@ UA Parser Scala Library
 This is the Scala implementation of [ua-parser](https://github.com/tobie/ua-parser).
 The implementation uses the shared regex patterns and overrides from regexes.yaml.
 
-[![Build Status](https://travis-ci.org/ua-parser/uap-scala.png?branch=master)](https://travis-ci.org/ua-parser/uap-scala)
+[![wercker status](https://app.wercker.com/status/ecaa3d98ba2b475f475cad290458a661/s "wercker status")](https://app.wercker.com/project/bykey/ecaa3d98ba2b475f475cad290458a661)
 
 Build:
 ------
