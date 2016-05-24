@@ -1,18 +1,21 @@
-UA Parser Scala Library
-======================
+# UA Parser Scala Library
 
 This is the Scala implementation of [ua-parser](https://github.com/tobie/ua-parser).
 The implementation uses the shared regex patterns and overrides from regexes.yaml.
+This is a fork of [the original uap-scala](https://github.com/ua-parser/uap-scala), and independently maintained from the original as it seems not to be maintained currently.
 
 [![wercker status](https://app.wercker.com/status/ecaa3d98ba2b475f475cad290458a661/s "wercker status")](https://app.wercker.com/project/bykey/ecaa3d98ba2b475f475cad290458a661)
 
-Build:
-------
+## Quick start
 
-    sbt package
+This fork of uap-scala is published to [Maven Central](http://search.maven.org/), currently only for Scala 2.11 (cross building is in my plan). So add the following to your build.sbt.
 
-Usage:
---------
+```
+libraryDependencies += "com.github.yanana" %% "uap-scala" % "0.1.0"
+```
+
+That's it! It's time to use uap-scala. 
+
 ```scala
 import ua.parser.Parser
 
@@ -24,7 +27,6 @@ import ua.parser.Parser
 
 Author:
 -------
+  * Shun Yanaura ([@ya7_](https://twitter.com/ya7_))
 
-  * Piotr Adamski [@mcveat](https://twitter.com/mcveat)
-
-  Based on the java implementation by Steve Jiang [@sjiang](https://twitter.com/sjiang) and using agent data from BrowserScope
+  Originary forked from the official UA Parser Scala binding by Piotr Adamski [@mcveat](https://twitter.com/mcveat).
