@@ -3,26 +3,36 @@ package ua.parser
 import java.util.regex.{Matcher, Pattern}
 import MatcherOps._
 
-case class Device(family: String)
+case class Device(family: String, brand: Option[String] = None, model: Option[String] = None)
 
 object Device {
-  private[parser] def fromMap(m: Map[String, String]) = m.get("family").map(Device(_))
+  private[parser] def fromMap(m: Map[String, String]) = m.get("family").map(Device(_, m.get("brand"), m.get("model")))
 
-  private[parser] case class DevicePattern(pattern: Pattern, familyReplacement: Option[String]) {
+  private[parser] case class DevicePattern(pattern: Pattern, familyReplacement: Option[String],
+                                           brandReplacement: Option[String], modelReplacement: Option[String]) {
     def process(agent: String): Option[Device] = {
       val matcher = pattern.matcher(agent)
       if (!matcher.find()) return None
-      familyReplacement.map { replacement =>
-        if (replacement.contains("$1") && matcher.groupCount() >= 1)  {
-          replacement.replaceFirst("\\$1", Matcher.quoteReplacement(matcher.group(1)))
-        } else replacement
-      }.orElse(matcher.groupAt(1)).map(Device(_))
+      val family = familyReplacement.map(r => replace(r, matcher)).orElse(matcher.groupAt(1))
+      val brand = brandReplacement.map(r => replace(r, matcher)).filterNot(s => s.isEmpty)
+      val model = modelReplacement.map(r => replace(r, matcher)).orElse(matcher.groupAt(1)).filterNot(s => s.isEmpty)
+      family.map(Device(_, brand, model))
+    }
+
+    def replace(replacement: String, matcher: Matcher) = {
+      (if (replacement.contains("$") && matcher.groupCount() >= 1)  {
+        (1 to matcher.groupCount()).foldLeft(replacement)((rep, i) => {
+          val toInsert = if(matcher.group(i) != null) matcher.group(i) else ""
+          rep.replaceFirst("\\$" + i, Matcher.quoteReplacement(toInsert))
+        })
+      } else replacement).trim
     }
   }
 
   private object DevicePattern {
     def fromMap(m: Map[String, String]) = m.get("regex").map { r =>
-      DevicePattern(Pattern.compile(r), m.get("device_replacement"))
+      val pattern = m.get("regex_flag").map(flag => Pattern.compile(r, Pattern.CASE_INSENSITIVE)).getOrElse(Pattern.compile(r))
+      DevicePattern(pattern, m.get("device_replacement"), m.get("brand_replacement"), m.get("model_replacement"))
     }
   }
 

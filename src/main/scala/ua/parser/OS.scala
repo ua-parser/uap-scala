@@ -12,7 +12,7 @@ object OS {
   }
 
   private[parser] case class OSPattern(pattern: Pattern, osReplacement: Option[String], v1Replacement: Option[String],
-                               v2Replacement: Option[String]) {
+                               v2Replacement: Option[String], v3Replacement: Option[String], v4Replacement: Option[String]) {
     def process(agent: String): Option[OS] = {
       val matcher = pattern.matcher(agent)
       if (!matcher.find()) return None
@@ -23,8 +23,8 @@ object OS {
       }.orElse(matcher.groupAt(1)).map { family =>
         val major = v1Replacement.orElse(matcher.groupAt(2))
         val minor = v2Replacement.orElse(matcher.groupAt(3))
-        val patch = matcher.groupAt(4)
-        val patchMinor = matcher.groupAt(5)
+        val patch = v3Replacement.orElse(matcher.groupAt(4))
+        val patchMinor = v4Replacement.orElse(matcher.groupAt(5))
         OS(family, major, minor, patch, patchMinor)
       }
     }
@@ -32,7 +32,8 @@ object OS {
 
   private object OSPattern {
     def fromMap(m: Map[String, String]) = m.get("regex").map { r =>
-      OSPattern(Pattern.compile(r), m.get("os_replacement"), m.get("os_v1_replacement"), m.get("os_v2_replacement"))
+      OSPattern(Pattern.compile(r), m.get("os_replacement"), m.get("os_v1_replacement"), m.get("os_v2_replacement"),
+        m.get("os_v3_replacement"), m.get("os_v4_replacement"))
     }
   }
 
