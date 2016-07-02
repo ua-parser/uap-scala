@@ -3,8 +3,7 @@ uap-scala [![Build Status](https://travis-ci.org/ua-parser/uap-scala.png?branch=
 
 A Scala user-agent string parser based on [ua-parser/uap-core](https://github.com/ua-parser/uap-core). It extracts browser, OS and device information.
 
-# Development
-## Checkout
+### Checkout
 The code for this repository can be checked out normally. It uses a [git submodule](https://git-scm.com/docs/git-submodule) to include the files needed from [uap-core](https://github.com/ua-parser/uap-core) so care must be taken to make sure the `core` directory is properly checked out and initialized.
 
 Checking out the repo for the first time
@@ -18,7 +17,7 @@ cd core
 git submodule update --init --recursive
 ```
 
-## Build
+### Build
 To build for the default Scala
 ```scala
 sbt package
@@ -28,7 +27,7 @@ To cross-build for different Scala versions
 sbt +package
 ```
 
-# Usage
+### Usage
 ```scala
 import org.uaparser.scala.Parser
 
@@ -38,7 +37,7 @@ println(client) // Client(UserAgent(Mobile Safari,Some(5),Some(1),None),OS(iOS,S
 }
 ```
 
-# Maintainers
+### Maintainers
 
 * Piotr Adamski ([@mcveat](https://twitter.com/mcveat)) (Author. Based on the java implementation by Steve Jiang [@sjiang](https://twitter.com/sjiang) and using agent data from BrowserScope)
 * [Ahmed Sobhi](https://github.com/humanzz) ([@humanzz](https://twitter.com/humanzz))
