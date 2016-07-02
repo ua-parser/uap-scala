@@ -12,7 +12,8 @@ object UserAgent {
   }
 
   private[parser] case class UserAgentPattern(pattern: Pattern, familyReplacement: Option[String],
-                                      v1Replacement: Option[String], v2Replacement: Option[String]) {
+                                      v1Replacement: Option[String], v2Replacement: Option[String],
+                                      v3Replacement: Option[String]) {
     def process(agent: String): Option[UserAgent] = {
       val matcher = pattern.matcher(agent)
       if (!matcher.find()) return None
@@ -23,7 +24,7 @@ object UserAgent {
       }.orElse(matcher.groupAt(1)).map { family =>
         val major = v1Replacement.orElse(matcher.groupAt(2))
         val minor = v2Replacement.orElse(matcher.groupAt(3))
-        val patch = matcher.groupAt(4)
+        val patch = v3Replacement.orElse(matcher.groupAt(4))
         UserAgent(family, major, minor, patch)
       }
     }
@@ -32,7 +33,7 @@ object UserAgent {
   private object UserAgentPattern {
     def fromMap(config: Map[String, String]) = config.get("regex").map { r =>
       UserAgentPattern(Pattern.compile(r), config.get("family_replacement"), config.get("v1_replacement"),
-        config.get("v2_replacement"))
+        config.get("v2_replacement"), config.get("v3_replacement"))
     }
   }
 
