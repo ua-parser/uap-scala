@@ -1,14 +1,15 @@
-package ua.parser
+package org.uaparser.scala
 
 import java.io.InputStream
+import java.util.{List => JList, Map => JMap}
 
+import org.uaparser.scala.Device.DeviceParser
+import org.uaparser.scala.OS.OSParser
+import org.uaparser.scala.UserAgent.UserAgentParser
 import org.yaml.snakeyaml.Yaml
 import org.yaml.snakeyaml.constructor.SafeConstructor
-import ua.parser.Device.DeviceParser
-import ua.parser.OS.OSParser
-import ua.parser.UserAgent.UserAgentParser
+
 import scala.collection.JavaConverters._
-import java.util.{Map => JMap, List => JList}
 
 case class Parser(userAgentParser: UserAgentParser, osParser: OSParser, deviceParser: DeviceParser)
     extends UserAgentStringParser {

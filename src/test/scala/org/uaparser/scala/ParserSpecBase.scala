@@ -1,4 +1,4 @@
-package ua.parser
+package org.uaparser.scala
 
 import java.io.ByteArrayInputStream
 import java.nio.charset.StandardCharsets

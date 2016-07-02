@@ -1,4 +1,4 @@
-package ua.parser
+package org.uaparser.scala
 
 import java.util.regex.Matcher
 

@@ -1,4 +1,4 @@
-package ua.parser
+package org.uaparser.scala
 
 import java.util.regex.{Matcher, Pattern}
 import MatcherOps._
@@ -7,11 +7,11 @@ case class UserAgent(family: String, major: Option[String] = None, minor: Option
                      patch: Option[String] = None)
 
 object UserAgent {
-  private[parser] def fromMap(m: Map[String, String]) = m.get("family").map { family =>
+  private[scala] def fromMap(m: Map[String, String]) = m.get("family").map { family =>
     UserAgent(family, m.get("major"), m.get("minor"), m.get("patch"))
   }
 
-  private[parser] case class UserAgentPattern(pattern: Pattern, familyReplacement: Option[String],
+  private[scala] case class UserAgentPattern(pattern: Pattern, familyReplacement: Option[String],
                                       v1Replacement: Option[String], v2Replacement: Option[String],
                                       v3Replacement: Option[String]) {
     def process(agent: String): Option[UserAgent] = {

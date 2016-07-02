@@ -1,14 +1,15 @@
-package ua.parser
+package org.uaparser.scala
 
 import java.util.regex.{Matcher, Pattern}
-import MatcherOps._
+
+import org.uaparser.scala.MatcherOps._
 
 case class Device(family: String, brand: Option[String] = None, model: Option[String] = None)
 
 object Device {
-  private[parser] def fromMap(m: Map[String, String]) = m.get("family").map(Device(_, m.get("brand"), m.get("model")))
+  private[scala] def fromMap(m: Map[String, String]) = m.get("family").map(Device(_, m.get("brand"), m.get("model")))
 
-  private[parser] case class DevicePattern(pattern: Pattern, familyReplacement: Option[String],
+  private[scala] case class DevicePattern(pattern: Pattern, familyReplacement: Option[String],
                                            brandReplacement: Option[String], modelReplacement: Option[String]) {
     def process(agent: String): Option[Device] = {
       val matcher = pattern.matcher(agent)
