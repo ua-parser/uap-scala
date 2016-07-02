@@ -1,30 +1,46 @@
-UA Parser Scala Library
-======================
+uap-scala [![Build Status](https://travis-ci.org/ua-parser/uap-scala.png?branch=master)](https://travis-ci.org/ua-parser/uap-scala)
+=========
 
-This is the Scala implementation of [ua-parser](https://github.com/tobie/ua-parser).
-The implementation uses the shared regex patterns and overrides from regexes.yaml.
+A Scala user-agent string parser based on [ua-parser/uap-core](https://github.com/ua-parser/uap-core). It extracts browser, OS and device information.
 
-[![Build Status](https://travis-ci.org/ua-parser/uap-scala.png?branch=master)](https://travis-ci.org/ua-parser/uap-scala)
+# Development
+## Checkout
+The code for this repository can be checked out normally. It uses a [git submodule](https://git-scm.com/docs/git-submodule) to include the files needed from [uap-core](https://github.com/ua-parser/uap-core) so care must be taken to make sure the `core` directory is properly checked out and initialized.
 
-Build:
-------
+Checking out the repo for the first time
+```
+git clone --recursive https://github.com/ua-parser/uap-scala.git
+```
+If uap-scala was checked out and core was not properly initialized, the following can be done
 
-    sbt package
+```
+cd core
+git submodule update --init --recursive
+```
 
-Usage:
---------
+## Build
+To build for the default Scala
 ```scala
-import ua.parser.Parser
+sbt package
+```
+To cross-build for different Scala versions
+```scala
+sbt +package
+```
 
-  val ua = "Mozilla/5.0 (iPhone; CPU iPhone OS 5_1_1 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9B206 Safari/7534.48.3"
-  val client = Parser.get.parse(ua) // you can also use CachingParser
-  println(client) // Client(UserAgent(Mobile Safari,Some(5),Some(1),None),OS(iOS,Some(5),Some(1),Some(1),None),Device(iPhone))
+# Usage
+```scala
+import org.uaparser.scala.Parser
+
+val ua = "Mozilla/5.0 (iPhone; CPU iPhone OS 5_1_1 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9B206 Safari/7534.48.3"
+val client = Parser.get.parse(ua) // you can also use CachingParser
+println(client) // Client(UserAgent(Mobile Safari,Some(5),Some(1),None),OS(iOS,Some(5),Some(1),Some(1),None),Device(iPhone))
 }
 ```
 
-Author:
--------
+# Maintainers
 
-  * Piotr Adamski [@mcveat](https://twitter.com/mcveat)
+* Piotr Adamski ([@mcveat](https://twitter.com/mcveat)) (Author. Based on the java implementation by Steve Jiang [@sjiang](https://twitter.com/sjiang) and using agent data from BrowserScope)
+* [Ahmed Sobhi](https://github.com/humanzz) ([@humanzz](https://twitter.com/humanzz))
 
-  Based on the java implementation by Steve Jiang [@sjiang](https://twitter.com/sjiang) and using agent data from BrowserScope
+  
