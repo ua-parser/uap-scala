@@ -27,6 +27,25 @@ To cross-build for different Scala versions
 sbt +package
 ```
 
+### Linking
+Linking
+
+You can link against this library in your program at the following coordinates:
+
+Scala 2.10
+```
+groupId: org.uaparser
+artifactId: uap-scala_2.10
+version: 0.1.0
+```
+
+Scala 2.11
+```
+groupId: org.uaparser
+artifactId: uap-scala_2.11
+version: 0.1.0
+```
+
 ### Usage
 ```scala
 import org.uaparser.scala.Parser
@@ -34,12 +53,9 @@ import org.uaparser.scala.Parser
 val ua = "Mozilla/5.0 (iPhone; CPU iPhone OS 5_1_1 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9B206 Safari/7534.48.3"
 val client = Parser.get.parse(ua) // you can also use CachingParser
 println(client) // Client(UserAgent(Mobile Safari,Some(5),Some(1),None),OS(iOS,Some(5),Some(1),Some(1),None),Device(iPhone))
-}
 ```
 
 ### Maintainers
 
 * Piotr Adamski ([@mcveat](https://twitter.com/mcveat)) (Author. Based on the java implementation by Steve Jiang [@sjiang](https://twitter.com/sjiang) and using agent data from BrowserScope)
 * [Ahmed Sobhi](https://github.com/humanzz) ([@humanzz](https://twitter.com/humanzz))
-
-  
