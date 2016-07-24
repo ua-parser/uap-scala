@@ -4,9 +4,9 @@ organization := "org.uaparser"
 
 version := "0.1.0"
 
-scalaVersion := "2.11.7"
+scalaVersion := "2.11.8"
 
-crossScalaVersions := Seq("2.10.5", "2.11.7")
+crossScalaVersions := Seq("2.10.6", "2.11.8")
 
 libraryDependencies ++= Seq(
   "org.yaml" % "snakeyaml" % "1.10",
