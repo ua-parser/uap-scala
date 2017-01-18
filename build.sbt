@@ -9,18 +9,18 @@ lazy val compilerOptions = Seq(
   "-language:higherKinds",
   "-language:implicitConversions",
   "-language:postfixOps",
+  "-Yno-adapted-args",
   "-Ywarn-dead-code",
   "-Ywarn-numeric-widen",
   "-Xfuture",
-  "-Yinline-warnings",
   "-Xlint"
 )
 
 val snakeyamlVersion = "1.17"
-val twitterUtilVersion = "6.34.0"
-val scalaCheckVersion = "1.13.1"
-val scalatestVersion = "2.2.6"
-val specs2Version = "2.4.15"
+val twitterUtilVersion = "6.40.0"
+val scalaCheckVersion = "1.13.4"
+val scalatestVersion = "3.0.1"
+val specs2Version = "2.4.17"
 
 lazy val coreDeps = Seq(
   "org.yaml" % "snakeyaml" % snakeyamlVersion,
@@ -35,7 +35,8 @@ lazy val testDeps = Seq(
 
 lazy val buildSettings = Seq(
   organization := "com.github.yanana",
-  scalaVersion := "2.11.8"
+  scalaVersion := "2.12.1",
+  crossScalaVersions := Seq("2.11.8", "2.12.1")
 )
 
 lazy val baseSettings = Seq(
@@ -59,6 +60,7 @@ includeFilter in (Test, unmanagedResources) := "*.yaml"
 scalacOptions ++= compilerOptions
 
 lazy val publishSettings = Seq(
+  releaseCrossBuild := true,
   releasePublishArtifactsAction := PgpKeys.publishSigned.value,
   homepage := Some(url("https://github.com/yanana/uap-scala")),
   licenses := Seq("MIT License" -> url("http://www.opensource.org/licenses/mit-license.php")),
