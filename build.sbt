@@ -6,12 +6,15 @@ version := "0.1.0"
 
 scalaVersion := "2.11.8"
 
-crossScalaVersions := Seq("2.10.6", "2.11.8")
+crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.1")
 
 libraryDependencies ++= Seq(
   "org.yaml" % "snakeyaml" % "1.10",
-  "com.twitter" %% "util-collection" % "6.23.0",
-  "org.specs2" %% "specs2-core" % "2.4.15" % "test"
+  "org.specs2" %% "specs2-core" % "3.8.8" % "test",
+  CrossVersion.partialVersion(scalaVersion.value) match {
+    case Some((2, scalaMajor)) if scalaMajor == 10 => "com.twitter" %% "util-collection" % "6.34.0"
+    case _ => "com.twitter" %% "util-collection" % "6.41.0"
+  }
 )
 
 unmanagedResourceDirectories in Compile += baseDirectory.value / "core"
