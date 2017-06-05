@@ -1,12 +1,16 @@
 package org.uaparser.scala
 
 import java.io.InputStream
+import java.util.{ Collections, LinkedHashMap, Map => JMap }
 
-import com.twitter.util.LruMap
-
-case class CachingParser(parser: Parser, size: Int) extends UserAgentStringParser {
-  lazy val clients = new LruMap[String, Client](size)
-  def parse(agent: String) = clients.get(agent).getOrElse {
+case class CachingParser(parser: Parser, maxEntries: Int) extends UserAgentStringParser {
+  lazy val clients = Collections.synchronizedMap(
+    new LinkedHashMap[String, Client](maxEntries + 1, 1.0f, true) {
+      override protected def removeEldestEntry(eldest: JMap.Entry[String, Client]): Boolean =
+        super.size > maxEntries
+    }
+  )
+  def parse(agent: String) = Option(clients.get(agent)).getOrElse {
     val client = parser.parse(agent)
     clients.put(agent, client)
     client

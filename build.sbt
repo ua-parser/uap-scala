@@ -6,11 +6,10 @@ version := "0.1.0"
 
 scalaVersion := "2.11.11"
 
-crossScalaVersions := Seq("2.11.11", "2.12.2")
+crossScalaVersions := Seq("2.10.6", "2.11.11", "2.12.2")
 
 libraryDependencies ++= Seq(
   "org.yaml" % "snakeyaml" % "1.18",
-  "com.twitter" %% "util-collection" % "6.43.0",
   "org.specs2" %% "specs2-core" % "2.4.17" % "test"
 )
 
