@@ -4,14 +4,13 @@ organization := "org.uaparser"
 
 version := "0.1.0"
 
-scalaVersion := "2.11.8"
+scalaVersion := "2.11.11"
 
-crossScalaVersions := Seq("2.10.6", "2.11.8")
+crossScalaVersions := Seq("2.10.6", "2.11.11", "2.12.2")
 
 libraryDependencies ++= Seq(
-  "org.yaml" % "snakeyaml" % "1.10",
-  "com.twitter" %% "util-collection" % "6.23.0",
-  "org.specs2" %% "specs2-core" % "2.4.15" % "test"
+  "org.yaml" % "snakeyaml" % "1.18",
+  "org.specs2" %% "specs2-core" % "2.4.17" % "test"
 )
 
 unmanagedResourceDirectories in Compile += baseDirectory.value / "core"
