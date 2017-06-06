@@ -14,10 +14,10 @@ object Device {
     def process(agent: String): Option[Device] = {
       val matcher = pattern.matcher(agent)
       if (!matcher.find()) return None
-      val family = familyReplacement.map(r => replace(r, matcher)).orElse(matcher.groupAt(1))
+      val family = familyReplacement.map(r => replace(r, matcher)).orElse(matcher.groupAt(1)).getOrElse("Other")
       val brand = brandReplacement.map(r => replace(r, matcher)).filterNot(s => s.isEmpty)
       val model = modelReplacement.map(r => replace(r, matcher)).orElse(matcher.groupAt(1)).filterNot(s => s.isEmpty)
-      family.map(Device(_, brand, model))
+      Some(Device(family, brand, model))
     }
 
     def replace(replacement: String, matcher: Matcher) = {
