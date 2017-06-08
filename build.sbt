@@ -37,6 +37,8 @@ publishTo := {
     Some("releases"  at nexus + "service/local/staging/deploy/maven2")
 }
 publishArtifact in Test := false
+releaseCrossBuild := true
+releasePublishArtifactsAction := PgpKeys.publishSigned.value
 
 pomExtra := (
   <url>https://github.com/ua-parser/uap-scala</url>
