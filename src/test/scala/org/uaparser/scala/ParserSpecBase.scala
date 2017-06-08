@@ -1,10 +1,9 @@
 package org.uaparser.scala
 
-import java.io.ByteArrayInputStream
-import java.nio.charset.StandardCharsets
-
 import org.specs2.mutable.Specification
 import org.yaml.snakeyaml.Yaml
+import java.io.{ ByteArrayInputStream, InputStream }
+import java.nio.charset.StandardCharsets
 import java.util.{ Map => JMap, List => JList}
 import scala.collection.JavaConverters._
 
@@ -12,6 +11,7 @@ trait ParserSpecBase extends Specification {
   sequential
 
   val parser: UserAgentStringParser
+  def createFromStream(stream: InputStream): UserAgentStringParser
 
   "Parser" should {
     val yaml = new Yaml()
@@ -42,11 +42,20 @@ trait ParserSpecBase extends Specification {
           |    device_replacement: 'CashPhone $1'
         """.stripMargin
       val stream = new ByteArrayInputStream(testConfig.getBytes(StandardCharsets.UTF_8))
-      val parser = Parser.create(stream)
+      val parser = createFromStream(stream)
       val client = parser.parse("""ABC12\34 (CashPhone-$9.0.1 CatOS OH-HAI=/^.^\=)""")
       client.userAgent.family must beEqualTo("""ABC (12\34)""")
       client.os.family must beEqualTo("CatOS 9000")
       client.device.family must beEqualTo("CashPhone $9")
+    }
+
+    "properly handle empty config" in {
+      val stream = new ByteArrayInputStream("{}".getBytes(StandardCharsets.UTF_8))
+      val parser = createFromStream(stream)
+      val client = parser.parse("""ABC12\34 (CashPhone-$9.0.1 CatOS OH-HAI=/^.^\=)""")
+      client.userAgent.family must beEqualTo("""Other""")
+      client.os.family must beEqualTo("Other")
+      client.device.family must beEqualTo("Other")
     }
 
     "properly parse user agents" in {
@@ -76,7 +85,7 @@ trait ParserSpecBase extends Specification {
       val cases = yaml.load(stream).asInstanceOf[JMap[String, JList[JMap[String, String]]]]
         .asScala.toMap.mapValues(_.asScala.toList.map(_.asScala.toMap))
       cases.getOrElse("test_cases", List()).filterNot(_.contains("js_ua")).map { config =>
-        config.filterNot { case (_, value) => value == null }
+        config.filterNot { case (_, value) => value eq null }
       }
     }
   }

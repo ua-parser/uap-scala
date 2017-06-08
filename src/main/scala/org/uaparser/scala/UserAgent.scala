@@ -31,20 +31,21 @@ object UserAgent {
   }
 
   private object UserAgentPattern {
-    def fromMap(config: Map[String, String]) = config.get("regex").map { r =>
+    def fromMap(config: Map[String, String]): Option[UserAgentPattern] = config.get("regex").map { r =>
       UserAgentPattern(Pattern.compile(r), config.get("family_replacement"), config.get("v1_replacement"),
         config.get("v2_replacement"), config.get("v3_replacement"))
     }
   }
 
   case class UserAgentParser(patterns: List[UserAgentPattern]) {
-    def parse(agent: String) = patterns.foldLeft[Option[UserAgent]](None) {
+    def parse(agent: String): UserAgent = patterns.foldLeft[Option[UserAgent]](None) {
       case (None, pattern) => pattern.process(agent)
       case (result, _) => result
     }.getOrElse(UserAgent("Other"))
   }
 
   object UserAgentParser {
-    def fromList(config: List[Map[String, String]]) = UserAgentParser(config.map(UserAgentPattern.fromMap).flatten)
+    def fromList(config: List[Map[String, String]]): UserAgentParser =
+      UserAgentParser(config.map(UserAgentPattern.fromMap).flatten)
   }
 }

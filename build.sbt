@@ -1,11 +1,7 @@
 name := "uap-scala"
-
 organization := "org.uaparser"
 
-version := "0.1.0"
-
 scalaVersion := "2.11.11"
-
 crossScalaVersions := Seq("2.10.6", "2.11.11", "2.12.2")
 
 libraryDependencies ++= Seq(
@@ -13,12 +9,11 @@ libraryDependencies ++= Seq(
   "org.specs2" %% "specs2-core" % "2.4.17" % "test"
 )
 
+mimaPreviousArtifacts := Set("org.uaparser" %% "uap-scala" % "0.1.0")
+
 unmanagedResourceDirectories in Compile += baseDirectory.value / "core"
-
 includeFilter in (Compile, unmanagedResources) := "regexes.yaml"
-
 unmanagedResourceDirectories in Test += baseDirectory.value / "core"
-
 includeFilter in (Test, unmanagedResources) := "*.yaml"
 
 // Publishing
