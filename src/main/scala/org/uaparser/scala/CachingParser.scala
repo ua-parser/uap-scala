@@ -2,6 +2,7 @@ package org.uaparser.scala
 
 import java.io.InputStream
 import java.util.{ Collections, LinkedHashMap, Map => JMap }
+import scala.util.Try
 
 case class CachingParser(parser: Parser, maxEntries: Int) extends UserAgentStringParser {
   lazy val clients: JMap[String, Client] = Collections.synchronizedMap(
@@ -19,7 +20,13 @@ case class CachingParser(parser: Parser, maxEntries: Int) extends UserAgentStrin
 
 object CachingParser {
   val defaultCacheSize: Int = 1000
-  def create(source: InputStream, size: Int = defaultCacheSize): CachingParser =
-    CachingParser(Parser.create(source), size)
-  def get(size: Int = defaultCacheSize): CachingParser = CachingParser(Parser.get, size)
+  def fromStream(source: InputStream, size: Int = defaultCacheSize): Try[CachingParser] =
+    Parser.fromStream(source).map(CachingParser(_, size))
+  def default(size: Int = defaultCacheSize): CachingParser = CachingParser(Parser.default, size)
+
+  @deprecated("use fromStream", "0.2.0")
+  def create(source: InputStream, size: Int = defaultCacheSize): CachingParser = fromStream(source, size).get
+
+  @deprecated("use default", "0.2.0")
+  def get(size: Int = defaultCacheSize): CachingParser = default(size)
 }

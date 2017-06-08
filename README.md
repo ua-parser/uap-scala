@@ -55,7 +55,7 @@ version: 0.1.0
 import org.uaparser.scala.Parser
 
 val ua = "Mozilla/5.0 (iPhone; CPU iPhone OS 5_1_1 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9B206 Safari/7534.48.3"
-val client = Parser.get.parse(ua) // you can also use CachingParser
+val client = Parser.default.parse(ua) // you can also use CachingParser
 println(client) // Client(UserAgent(Mobile Safari,Some(5),Some(1),None),OS(iOS,Some(5),Some(1),Some(1),None),Device(iPhone))
 ```
 
