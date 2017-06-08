@@ -1,5 +1,9 @@
-uap-scala [![Build Status](https://travis-ci.org/ua-parser/uap-scala.png?branch=master)](https://travis-ci.org/ua-parser/uap-scala)
+uap-scala
 =========
+
+[![Build status](https://travis-ci.org/ua-parser/uap-scala.svg?branch=master)](https://travis-ci.org/ua-parser/uap-scala)
+[![Codecov status](https://codecov.io/gh/ua-parser/uap-scala/branch/master/graph/badge.svg)](https://codecov.io/gh/ua-parser/uap-scala)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.uaparser/uap-scala_2.11/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.uaparser/uap-scala_2.11)
 
 A Scala user-agent string parser based on [ua-parser/uap-core](https://github.com/ua-parser/uap-core). It extracts browser, OS and device information.
 
