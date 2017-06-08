@@ -8,6 +8,7 @@ import org.uaparser.scala.UserAgent.UserAgentParser
 import org.yaml.snakeyaml.Yaml
 import org.yaml.snakeyaml.constructor.SafeConstructor
 import scala.collection.JavaConverters._
+import scala.util.Try
 
 case class Parser(userAgentParser: UserAgentParser, osParser: OSParser, deviceParser: DeviceParser)
     extends UserAgentStringParser {
@@ -16,7 +17,7 @@ case class Parser(userAgentParser: UserAgentParser, osParser: OSParser, devicePa
 }
 
 object Parser {
-  def create(source: InputStream): Parser = {
+  def fromInputStream(source: InputStream): Try[Parser] = Try {
     val yaml = new Yaml(new SafeConstructor)
     val javaConfig = yaml.load(source).asInstanceOf[JMap[String, JList[JMap[String, String]]]]
     val config = javaConfig.asScala.toMap.mapValues(_.asScala.toList.map(_.asScala.toMap.filterNot {
@@ -27,5 +28,11 @@ object Parser {
     val deviceParser = DeviceParser.fromList(config.getOrElse("device_parsers", Nil))
     Parser(userAgentParser, osParser, deviceParser)
   }
-  def get: Parser = create(this.getClass.getResourceAsStream("/regexes.yaml"))
+  def default: Parser = fromInputStream(this.getClass.getResourceAsStream("/regexes.yaml")).get
+
+  @deprecated("use fromInputStream", "0.2.0")
+  def create(source: InputStream): Parser = fromInputStream(source).get
+
+  @deprecated("use default", "0.2.0")
+  def get: Parser = default
 }
