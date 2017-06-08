@@ -1,6 +1,17 @@
 name := "uap-scala"
 organization := "org.uaparser"
 
+scalacOptions ++= Seq(
+  "-deprecation",
+  "-encoding", "UTF-8",
+  "-feature",
+  "-unchecked",
+  "-Yno-adapted-args",
+  "-Ywarn-dead-code",
+  "-Ywarn-numeric-widen",
+  "-Xfuture"
+)
+
 scalaVersion := "2.11.11"
 crossScalaVersions := Seq("2.10.6", "2.11.11", "2.12.2")
 
