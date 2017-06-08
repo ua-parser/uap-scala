@@ -20,12 +20,12 @@ case class CachingParser(parser: Parser, maxEntries: Int) extends UserAgentStrin
 
 object CachingParser {
   val defaultCacheSize: Int = 1000
-  def fromStream(source: InputStream, size: Int = defaultCacheSize): Try[CachingParser] =
-    Parser.fromStream(source).map(CachingParser(_, size))
+  def fromInputStream(source: InputStream, size: Int = defaultCacheSize): Try[CachingParser] =
+    Parser.fromInputStream(source).map(CachingParser(_, size))
   def default(size: Int = defaultCacheSize): CachingParser = CachingParser(Parser.default, size)
 
-  @deprecated("use fromStream", "0.2.0")
-  def create(source: InputStream, size: Int = defaultCacheSize): CachingParser = fromStream(source, size).get
+  @deprecated("use fromInputStream", "0.2.0")
+  def create(source: InputStream, size: Int = defaultCacheSize): CachingParser = fromInputStream(source, size).get
 
   @deprecated("use default", "0.2.0")
   def get(size: Int = defaultCacheSize): CachingParser = default(size)
