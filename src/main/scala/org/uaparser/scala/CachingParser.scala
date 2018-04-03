@@ -23,10 +23,4 @@ object CachingParser {
   def fromInputStream(source: InputStream, size: Int = defaultCacheSize): Try[CachingParser] =
     Parser.fromInputStream(source).map(CachingParser(_, size))
   def default(size: Int = defaultCacheSize): CachingParser = CachingParser(Parser.default, size)
-
-  @deprecated("use fromInputStream", "0.2.0")
-  def create(source: InputStream, size: Int = defaultCacheSize): CachingParser = fromInputStream(source, size).get
-
-  @deprecated("use default", "0.2.0")
-  def get(size: Int = defaultCacheSize): CachingParser = default(size)
 }
