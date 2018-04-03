@@ -40,14 +40,14 @@ Scala 2.10
 ```
 groupId: org.uaparser
 artifactId: uap-scala_2.10
-version: 0.1.0
+version: 0.2.0
 ```
 
 Scala 2.11
 ```
 groupId: org.uaparser
 artifactId: uap-scala_2.11
-version: 0.1.0
+version: 0.2.0
 ```
 
 ### Usage
@@ -63,3 +63,4 @@ println(client) // Client(UserAgent(Mobile Safari,Some(5),Some(1),None),OS(iOS,S
 
 * Piotr Adamski ([@mcveat](https://twitter.com/mcveat)) (Author. Based on the java implementation by Steve Jiang [@sjiang](https://twitter.com/sjiang) and using agent data from BrowserScope)
 * [Ahmed Sobhi](https://github.com/humanzz) ([@humanzz](https://twitter.com/humanzz))
+* [Travis Brown](https://github.com/travisbrown) ([@travisbrown](https://twitter.com/travisbrown))
