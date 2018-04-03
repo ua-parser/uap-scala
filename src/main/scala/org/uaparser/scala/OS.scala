@@ -1,7 +1,7 @@
 package org.uaparser.scala
 
-import java.util.regex.{ Matcher, Pattern }
 import MatcherOps._
+import java.util.regex.{ Matcher, Pattern }
 
 case class OS(family: String, major: Option[String] = None, minor: Option[String] = None, patch: Option[String] = None,
               patchMinor: Option[String] = None)
