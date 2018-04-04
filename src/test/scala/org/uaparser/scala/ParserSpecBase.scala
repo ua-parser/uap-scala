@@ -80,7 +80,7 @@ trait ParserSpecBase extends Specification {
       }
     }
     
-    def readCasesConfig(resource: String) = {
+    def readCasesConfig(resource: String): List[Map[String, String]] = {
       val stream = this.getClass.getResourceAsStream(resource)
       val cases = yaml.load(stream).asInstanceOf[JMap[String, JList[JMap[String, String]]]]
         .asScala.toMap.mapValues(_.asScala.toList.map(_.asScala.toMap))

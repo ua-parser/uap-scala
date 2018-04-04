@@ -12,15 +12,15 @@ scalacOptions ++= Seq(
   "-Xfuture"
 )
 
-scalaVersion := "2.11.11"
-crossScalaVersions := Seq("2.10.6", "2.11.11", "2.12.2")
+scalaVersion := "2.11.12"
+crossScalaVersions := Seq("2.10.7", "2.11.12", "2.12.5")
 
 libraryDependencies ++= Seq(
-  "org.yaml" % "snakeyaml" % "1.18",
-  "org.specs2" %% "specs2-core" % "2.4.17" % "test"
+  "org.yaml" % "snakeyaml" % "1.20",
+  "org.specs2" %% "specs2-core" % "2.5" % "test"
 )
 
-mimaPreviousArtifacts := Set("org.uaparser" %% "uap-scala" % "0.1.0")
+mimaPreviousArtifacts := Set("org.uaparser" %% "uap-scala" % "0.2.0")
 
 unmanagedResourceDirectories in Compile += baseDirectory.value / "core"
 includeFilter in (Compile, unmanagedResources) := "regexes.yaml"
@@ -63,5 +63,10 @@ pomExtra := (
       <id>humanzz</id>
       <name>Ahmed Sobhi</name>
       <url>https://twitter.com/humanzz</url>
+    </developer>
+    <developer>
+      <id>travisbrown</id>
+      <name>Travis Brown</name>
+      <url>https://twitter.com/travisbrown</url>
     </developer>
   </developers>)

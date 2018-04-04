@@ -29,10 +29,4 @@ object Parser {
     Parser(userAgentParser, osParser, deviceParser)
   }
   def default: Parser = fromInputStream(this.getClass.getResourceAsStream("/regexes.yaml")).get
-
-  @deprecated("use fromInputStream", "0.2.0")
-  def create(source: InputStream): Parser = fromInputStream(source).get
-
-  @deprecated("use default", "0.2.0")
-  def get: Parser = default
 }
