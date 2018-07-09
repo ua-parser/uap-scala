@@ -22,11 +22,11 @@ git submodule update --init --recursive
 ```
 
 ### Build
-To build for the default Scala
+To build for the default Scala (currently 2.11):
 ```scala
 sbt package
 ```
-To cross-build for different Scala versions
+To cross-build for different Scala versions:
 ```scala
 sbt +package
 ```
@@ -40,14 +40,21 @@ Scala 2.10
 ```
 groupId: org.uaparser
 artifactId: uap-scala_2.10
-version: 0.2.0
+version: 0.3.0
 ```
 
 Scala 2.11
 ```
 groupId: org.uaparser
 artifactId: uap-scala_2.11
-version: 0.2.0
+version: 0.3.0
+```
+
+Scala 2.12
+```
+groupId: org.uaparser
+artifactId: uap-scala_2.12
+version: 0.3.0
 ```
 
 ### Usage
