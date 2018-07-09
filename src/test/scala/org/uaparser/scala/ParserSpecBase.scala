@@ -13,10 +13,19 @@ trait ParserSpecBase extends Specification {
   val parser: UserAgentStringParser
   def createFromStream(stream: InputStream): UserAgentStringParser
 
-  "Parser" should {
+  "Parser should" >> {
     val yaml = new Yaml()
 
-    "parse basic ua" in {
+    def readCasesConfig(resource: String): List[Map[String, String]] = {
+      val stream = this.getClass.getResourceAsStream(resource)
+      val cases = yaml.load(stream).asInstanceOf[JMap[String, JList[JMap[String, String]]]]
+        .asScala.toMap.mapValues(_.asScala.toList.map(_.asScala.toMap))
+      cases.getOrElse("test_cases", List()).filterNot(_.contains("js_ua")).map { config =>
+        config.filterNot { case (_, value) => value eq null }
+      }
+    }
+
+    "parse basic ua" >> {
       val cases = List(
         "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; fr; rv:1.9.1.5) Gecko/20091102 Firefox/3.5.5 ,gzip(gfe),gzip(gfe)" ->
           Client(UserAgent("Firefox", Some("3"), Some("5"), Some("5")), OS("Mac OS X", Some("10"), Some("4")), Device("Other")),
@@ -28,7 +37,7 @@ trait ParserSpecBase extends Specification {
       }
     }
 
-    "properly quote replacements" in {
+    "properly quote replacements" >> {
       val testConfig =
         """
           |user_agent_parsers:
@@ -49,7 +58,7 @@ trait ParserSpecBase extends Specification {
       client.device.family must beEqualTo("CashPhone $9")
     }
 
-    "properly handle empty config" in {
+    "properly handle empty config" >> {
       val stream = new ByteArrayInputStream("{}".getBytes(StandardCharsets.UTF_8))
       val parser = createFromStream(stream)
       val client = parser.parse("""ABC12\34 (CashPhone-$9.0.1 CatOS OH-HAI=/^.^\=)""")
@@ -58,7 +67,7 @@ trait ParserSpecBase extends Specification {
       client.device.family must beEqualTo("Other")
     }
 
-    "properly parse user agents" in {
+    "properly parse user agents" >> {
       List("/tests/test_ua.yaml", "/test_resources/firefox_user_agent_strings.yaml",
         "/test_resources/pgts_browser_list.yaml").map { file =>
         readCasesConfig(file).map { c =>
@@ -67,25 +76,16 @@ trait ParserSpecBase extends Specification {
       }.flatten
     }
 
-    "properly parse os" in {
+    "properly parse os" >> {
       List("/tests/test_os.yaml", "/test_resources/additional_os_tests.yaml").map { file =>
         readCasesConfig(file).map { c =>
           parser.parse(c("user_agent_string")).os must beEqualTo(OS.fromMap(c).get)
         }
       }.flatten
     }
-    "properly parse device" in {
+    "properly parse device" >> {
       readCasesConfig("/tests/test_device.yaml").map { c =>
         parser.parse(c("user_agent_string")).device must beEqualTo(Device.fromMap(c).get)
-      }
-    }
-    
-    def readCasesConfig(resource: String): List[Map[String, String]] = {
-      val stream = this.getClass.getResourceAsStream(resource)
-      val cases = yaml.load(stream).asInstanceOf[JMap[String, JList[JMap[String, String]]]]
-        .asScala.toMap.mapValues(_.asScala.toList.map(_.asScala.toMap))
-      cases.getOrElse("test_cases", List()).filterNot(_.contains("js_ua")).map { config =>
-        config.filterNot { case (_, value) => value eq null }
       }
     }
   }

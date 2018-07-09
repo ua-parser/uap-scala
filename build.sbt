@@ -13,14 +13,14 @@ scalacOptions ++= Seq(
 )
 
 scalaVersion := "2.11.12"
-crossScalaVersions := Seq("2.10.7", "2.11.12", "2.12.5")
+crossScalaVersions := Seq("2.10.7", "2.11.12", "2.12.6")
 
 libraryDependencies ++= Seq(
-  "org.yaml" % "snakeyaml" % "1.20",
-  "org.specs2" %% "specs2-core" % "2.5" % "test"
+  "org.yaml" % "snakeyaml" % "1.21",
+  "org.specs2" %% "specs2-core" % "3.10.0" % "test"
 )
 
-mimaPreviousArtifacts := Set("org.uaparser" %% "uap-scala" % "0.2.0")
+mimaPreviousArtifacts := Set("org.uaparser" %% "uap-scala" % "0.3.0")
 
 unmanagedResourceDirectories in Compile += baseDirectory.value / "core"
 includeFilter in (Compile, unmanagedResources) := "regexes.yaml"
