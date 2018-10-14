@@ -58,6 +58,26 @@ trait ParserSpecBase extends Specification {
       client.device.family must beEqualTo("CashPhone $9")
     }
 
+    "properly quote all os replacements" >> {
+      val testConfig =
+        """
+          |os_parsers:
+          |  - regex: '(\w+\s+Mac OS X\s+\w+\s+(\d+).(\d+).(\d+).*)'
+          |    os_replacement: 'Mac OS X'
+          |    os_v1_replacement: '$2'
+          |    os_v2_replacement: '$3'
+          |    os_v3_replacement: '$4'
+        """.stripMargin
+
+      val stream = new ByteArrayInputStream(testConfig.getBytes(StandardCharsets.UTF_8))
+      val parser = createFromStream(stream)
+      val client = parser.parse("""ABC12\34 (Intelx64 Mac OS X Version 10.12.6 OH-HAI=/^.^\=)""")
+      client.os.family must beEqualTo("Mac OS X")
+      client.os.major must beSome("10")
+      client.os.minor must beSome("12")
+      client.os.patch must beSome("6")
+    }
+
     "properly handle empty config" >> {
       val stream = new ByteArrayInputStream("{}".getBytes(StandardCharsets.UTF_8))
       val parser = createFromStream(stream)
