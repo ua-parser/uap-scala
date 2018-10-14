@@ -32,16 +32,20 @@ object OS {
         osReplacement
           .map(replacementBack1(matcher))
           .orElse(matcher.groupAt(1)).map { family =>
-            val major = v1Replacement
-              .map(replacementBack1(matcher))
-              .orElse(matcher.groupAt(2))
-            val minor = v2Replacement.orElse(matcher.groupAt(3))
-            val patch = v3Replacement.orElse(matcher.groupAt(4))
-            val patchMinor = v4Replacement.orElse(matcher.groupAt(5))
+            val major = v1Replacement.flatMap(replace(matcher)).orElse(matcher.groupAt(2))
+            val minor = v2Replacement.flatMap(replace(matcher)).orElse(matcher.groupAt(3))
+            val patch = v3Replacement.flatMap(replace(matcher)).orElse(matcher.groupAt(4))
+            val patchMinor = v4Replacement.flatMap(replace(matcher)).orElse(matcher.groupAt(5))
             OS(family, major, minor, patch, patchMinor)
         }
       }
     }
+
+    private def replace(matcher: Matcher)(replacement: String): Option[String] =
+      if (replacement.contains("$")) { // is a backreference (i.e. $1, $2, $3, $4, etc)
+        val group: Int = replacement.substring(1).toInt
+        matcher.groupAt(group)
+      } else Some(replacement)
   }
 
   private object OSPattern {
