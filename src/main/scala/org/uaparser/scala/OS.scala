@@ -2,6 +2,7 @@ package org.uaparser.scala
 
 import MatcherOps._
 import java.util.regex.{ Matcher, Pattern }
+import scala.util.control.Exception.allCatch
 
 case class OS(family: String, major: Option[String] = None, minor: Option[String] = None, patch: Option[String] = None,
               patchMinor: Option[String] = None)
@@ -19,10 +20,18 @@ object OS {
     } else replacement
 
   private[this] def replaceBackreference(matcher: Matcher)(replacement: String): Option[String] =
-    if (replacement.contains("$")) { // is a backreference (i.e. $1, $2, $3, $4, etc)
-      val group: Int = replacement.substring(1).toInt
-      matcher.groupAt(group)
-    } else Some(replacement)
+    getBackreferenceGroup(replacement) match {
+      case Some(group) => matcher.groupAt(group)
+      case None        => Some(replacement)
+    }
+
+  private[this] def getBackreferenceGroup(replacement: String): Option[Int] =
+    for {
+      ref <- Option(replacement).filter(_.contains("$"))
+      groupOpt = allCatch opt ref.substring(1).toInt
+      group <- groupOpt
+    } yield group
+
 
   private[scala] case class OSPattern(
     pattern: Pattern,
