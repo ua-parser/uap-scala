@@ -2,6 +2,7 @@ package org.uaparser.scala
 
 import MatcherOps._
 import java.util.regex.{ Matcher, Pattern }
+import scala.util.control.Exception.allCatch
 
 case class OS(family: String, major: Option[String] = None, minor: Option[String] = None, patch: Option[String] = None,
               patchMinor: Option[String] = None)
@@ -18,6 +19,20 @@ object OS {
       quotedBack1.matcher(replacement).replaceAll(matcher.group(1))
     } else replacement
 
+  private[this] def replaceBackreference(matcher: Matcher)(replacement: String): Option[String] =
+    getBackreferenceGroup(replacement) match {
+      case Some(group) => matcher.groupAt(group)
+      case None        => Some(replacement)
+    }
+
+  private[this] def getBackreferenceGroup(replacement: String): Option[Int] =
+    for {
+      ref <- Option(replacement).filter(_.contains("$"))
+      groupOpt = allCatch opt ref.substring(1).toInt
+      group <- groupOpt
+    } yield group
+
+
   private[scala] case class OSPattern(
     pattern: Pattern,
     osReplacement: Option[String],
@@ -32,12 +47,10 @@ object OS {
         osReplacement
           .map(replacementBack1(matcher))
           .orElse(matcher.groupAt(1)).map { family =>
-            val major = v1Replacement
-              .map(replacementBack1(matcher))
-              .orElse(matcher.groupAt(2))
-            val minor = v2Replacement.orElse(matcher.groupAt(3))
-            val patch = v3Replacement.orElse(matcher.groupAt(4))
-            val patchMinor = v4Replacement.orElse(matcher.groupAt(5))
+            val major = v1Replacement.flatMap(replaceBackreference(matcher)).orElse(matcher.groupAt(2))
+            val minor = v2Replacement.flatMap(replaceBackreference(matcher)).orElse(matcher.groupAt(3))
+            val patch = v3Replacement.flatMap(replaceBackreference(matcher)).orElse(matcher.groupAt(4))
+            val patchMinor = v4Replacement.flatMap(replaceBackreference(matcher)).orElse(matcher.groupAt(5))
             OS(family, major, minor, patch, patchMinor)
         }
       }
