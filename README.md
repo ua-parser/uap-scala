@@ -71,3 +71,4 @@ println(client) // Client(UserAgent(Mobile Safari,Some(5),Some(1),None),OS(iOS,S
 * Piotr Adamski ([@mcveat](https://twitter.com/mcveat)) (Author. Based on the java implementation by Steve Jiang [@sjiang](https://twitter.com/sjiang) and using agent data from BrowserScope)
 * [Ahmed Sobhi](https://github.com/humanzz) ([@humanzz](https://twitter.com/humanzz))
 * [Travis Brown](https://github.com/travisbrown) ([@travisbrown](https://twitter.com/travisbrown))
+* [Nguyen Hong Phuc](https://github.com/phucnh) ([@phuc89](https://twitter.com/phuc89))
