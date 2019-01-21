@@ -69,4 +69,9 @@ pomExtra := (
       <name>Travis Brown</name>
       <url>https://twitter.com/travisbrown</url>
     </developer>
+    <developer>
+      <id>phucnh</id>
+      <name>Nguyen Hong Phuc</name>
+      <url>https://twitter.com/phuc89</url>
+    </developer>
   </developers>)
