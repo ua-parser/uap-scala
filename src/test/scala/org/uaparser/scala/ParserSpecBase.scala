@@ -78,6 +78,26 @@ trait ParserSpecBase extends Specification {
       client.os.patch must beSome("6")
     }
 
+    "properly quote all user agent replacements" >> {
+      val testConfig =
+         """
+           |user_agent_parsers:
+           |  - regex: 'ABC([\\0-9]+)'
+           |    family_replacement: 'ABC ($1)'
+           |    v1_replacement: '1'
+           |    v2_replacement: '0'
+           |    v3_replacement: '2'
+         """.stripMargin
+
+      val stream = new ByteArrayInputStream(testConfig.getBytes(StandardCharsets.UTF_8))
+      val parser = createFromStream(stream)
+      val client = parser.parse("""ABC12\34; OH-HAI=/^.^\=""")
+      client.userAgent.family must beEqualTo("""ABC (12\34)""")
+      client.userAgent.major must beSome("1")
+      client.userAgent.minor must beSome("0")
+      client.userAgent.patch must beSome("2")
+    }
+
     "properly handle empty config" >> {
       val stream = new ByteArrayInputStream("{}".getBytes(StandardCharsets.UTF_8))
       val parser = createFromStream(stream)
