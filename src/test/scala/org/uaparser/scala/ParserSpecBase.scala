@@ -87,6 +87,21 @@ trait ParserSpecBase extends Specification {
       client.device.family must beEqualTo("Other")
     }
 
+    "properly parse an user agent with None for missing information" >> {
+      val testConfig =
+        """
+          |user_agent_parsers:
+          |  - regex: '(ABC) (\d+?\.|)(\d+|)(\d+|);'
+        """.stripMargin
+      val stream = new ByteArrayInputStream(testConfig.getBytes(StandardCharsets.UTF_8))
+      val parser = createFromStream(stream)
+      val client = parser.parse("""(compatible; ABC ; OH-HAI=/^.^\=""")
+      client.userAgent.family must beEqualTo("ABC")
+      client.userAgent.major must beNone
+      client.userAgent.minor must beNone
+      client.userAgent.patch must beNone
+    }
+
     "properly parse user agents" >> {
       List("/tests/test_ua.yaml", "/test_resources/firefox_user_agent_strings.yaml",
         "/test_resources/pgts_browser_list.yaml").map { file =>
