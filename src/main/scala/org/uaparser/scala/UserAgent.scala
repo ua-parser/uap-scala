@@ -22,9 +22,9 @@ object UserAgent {
           replacement.replaceFirst("\\$1", Matcher.quoteReplacement(matcher.group(1)))
         } else replacement
       }.orElse(matcher.groupAt(1)).map { family =>
-        val major = v1Replacement.orElse(matcher.groupAt(2))
-        val minor = v2Replacement.orElse(matcher.groupAt(3))
-        val patch = v3Replacement.orElse(matcher.groupAt(4))
+        val major = v1Replacement.orElse(matcher.groupAt(2)).filter(_.nonEmpty)
+        val minor = v2Replacement.orElse(matcher.groupAt(3)).filter(_.nonEmpty)
+        val patch = v3Replacement.orElse(matcher.groupAt(4)).filter(_.nonEmpty)
         UserAgent(family, major, minor, patch)
       }
     }
