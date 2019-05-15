@@ -6,19 +6,33 @@ scalacOptions ++= Seq(
   "-encoding", "UTF-8",
   "-feature",
   "-unchecked",
-  "-Yno-adapted-args",
   "-Ywarn-dead-code",
   "-Ywarn-numeric-widen",
   "-Xfuture"
 )
 
-scalaVersion := "2.11.12"
-crossScalaVersions := Seq("2.10.7", "2.11.12", "2.12.8")
+scalacOptions := {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, scalaMajor)) if scalaMajor >= 11 =>
+        scalacOptions.value :+ "-Xlint:adapted-args"
+      case _ =>
+        scalacOptions.value :+ "-Yno-adapted-args"
+    }
+  }
 
-libraryDependencies ++= Seq(
-  "org.yaml" % "snakeyaml" % "1.24",
-  "org.specs2" %% "specs2-core" % "3.10.0" % "test"
-)
+scalaVersion := "2.11.12"
+crossScalaVersions := Seq("2.10.7", "2.11.12", "2.12.8", "2.13.0-RC1")
+
+libraryDependencies +=  "org.yaml" % "snakeyaml" % "1.24"
+
+libraryDependencies := {
+  CrossVersion.partialVersion(scalaVersion.value) match {
+    case Some((2, scalaMajor)) if scalaMajor >= 11 =>
+      libraryDependencies.value ++ Seq("org.specs2" %% "specs2-core" % "4.5.1" % "test")
+    case _ =>
+      libraryDependencies.value ++ Seq("org.specs2" %% "specs2-core" % "3.10.0" % "test")
+    }
+  }
 
 mimaPreviousArtifacts := Set("org.uaparser" %% "uap-scala" % "0.3.0")
 
