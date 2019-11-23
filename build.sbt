@@ -20,8 +20,8 @@ scalacOptions := {
     }
   }
 
-scalaVersion := "2.11.12"
-crossScalaVersions := Seq("2.10.7", "2.11.12", "2.12.8", "2.13.1")
+scalaVersion := "2.12.10"
+crossScalaVersions := Seq("2.10.7", "2.11.12", "2.12.10", "2.13.1")
 
 libraryDependencies +=  "org.yaml" % "snakeyaml" % "1.25"
 
