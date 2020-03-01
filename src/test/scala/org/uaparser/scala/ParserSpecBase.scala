@@ -28,7 +28,7 @@ trait ParserSpecBase extends Specification {
     "parse basic ua" >> {
       val cases = List(
         "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; fr; rv:1.9.1.5) Gecko/20091102 Firefox/3.5.5 ,gzip(gfe),gzip(gfe)" ->
-          Client(UserAgent("Firefox", Some("3"), Some("5"), Some("5")), OS("Mac OS X", Some("10"), Some("4")), Device("Other")),
+          Client(UserAgent("Firefox", Some("3"), Some("5"), Some("5")), OS("Mac OS X", Some("10"), Some("4")), Device("Mac", Some("Apple"), Some("Mac"))),
         "Mozilla/5.0 (iPhone; CPU iPhone OS 5_1_1 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9B206 Safari/7534.48.3" ->
           Client(UserAgent("Mobile Safari", Some("5"), Some("1")), OS("iOS", Some("5"), Some("1"), Some("1")), Device("iPhone", Some("Apple"), Some("iPhone")))
       )
