@@ -40,21 +40,28 @@ Scala 2.10
 ```
 groupId: org.uaparser
 artifactId: uap-scala_2.10
-version: 0.3.0
+version: 0.11.0
 ```
 
 Scala 2.11
 ```
 groupId: org.uaparser
 artifactId: uap-scala_2.11
-version: 0.3.0
+version: 0.11.0
 ```
 
 Scala 2.12
 ```
 groupId: org.uaparser
 artifactId: uap-scala_2.12
-version: 0.3.0
+version: 0.11.0
+```
+
+Scala 2.13
+```
+groupId: org.uaparser
+artifactId: uap-scala_2.13
+version: 0.11.0
 ```
 
 ### Usage
