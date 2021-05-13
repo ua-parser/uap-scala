@@ -8,12 +8,27 @@ import org.uaparser.scala.UserAgent.UserAgentParser
 import org.yaml.snakeyaml.Yaml
 import org.yaml.snakeyaml.constructor.SafeConstructor
 import scala.collection.JavaConverters._
+import scala.concurrent.{Await, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration.Duration
 import scala.util.Try
 
 case class Parser(userAgentParser: UserAgentParser, osParser: OSParser, deviceParser: DeviceParser)
     extends UserAgentStringParser {
   def parse(agent: String): Client =
     Client(userAgentParser.parse(agent), osParser.parse(agent), deviceParser.parse(agent))
+
+  def parParse(agent: String): Client = {
+    val userAgentFuture = Future {userAgentParser.parse(agent)}
+    val osFuture = Future {osParser.parse(agent)}
+    val deviceFuture = Future {deviceParser.parse(agent)}
+    val clientFuture = for {
+      ua <- userAgentFuture
+      os <- osFuture
+      dv <- deviceFuture
+    } yield Client(ua, os, dv)
+    Await.result(clientFuture, Duration.Inf)
+  }
 }
 
 object Parser {
