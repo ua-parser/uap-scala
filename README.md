@@ -65,6 +65,7 @@ version: 0.11.0
 ```
 
 ### Usage
+#### Retrieve data on a user-agent string
 ```scala
 import org.uaparser.scala.Parser
 
@@ -72,7 +73,24 @@ val ua = "Mozilla/5.0 (iPhone; CPU iPhone OS 5_1_1 like Mac OS X) AppleWebKit/53
 val client = Parser.default.parse(ua) // you can also use CachingParser
 println(client) // Client(UserAgent(Mobile Safari,Some(5),Some(1),None),OS(iOS,Some(5),Some(1),Some(1),None),Device(iPhone))
 ```
+#### Extract partial data from user-agent string
+The time costs of parsing all the data may be high.
+To reduce the costs, we can just parse partial data.
+```scala
+import org.uaparser.scala.Parser
 
+val raw = "Mozilla/5.0 (iPhone; CPU iPhone OS 5_1_1 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9B206 Safari/7534.48.3"
+val parser = Parser.default
+
+val os = parser.osParser.parse(raw)
+println(os) // OS(iOS,Some(5),Some(1),Some(1),None)
+
+val userAgent = parser.userAgentParser.parse(raw)
+println(userAgent) // UserAgent(Mobile Safari,Some(5),Some(1),None)
+
+val device = parser.deviceParser.parse(raw)
+println(device) // Device(iPhone,Some(Apple),Some(iPhone))
+```
 ### Maintainers
 
 * Piotr Adamski ([@mcveat](https://twitter.com/mcveat)) (Author. Based on the java implementation by Steve Jiang [@sjiang](https://twitter.com/sjiang) and using agent data from BrowserScope)
