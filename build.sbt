@@ -36,10 +36,10 @@ libraryDependencies := {
 
 mimaPreviousArtifacts := Set("org.uaparser" %% "uap-scala" % "0.3.0")
 
-unmanagedResourceDirectories in Compile += baseDirectory.value / "core"
-includeFilter in (Compile, unmanagedResources) := "regexes.yaml"
-unmanagedResourceDirectories in Test += baseDirectory.value / "core"
-includeFilter in (Test, unmanagedResources) := "*.yaml"
+Compile / unmanagedResourceDirectories += baseDirectory.value / "core"
+Compile / unmanagedResources / includeFilter := "regexes.yaml"
+Test / unmanagedResourceDirectories += baseDirectory.value / "core"
+Test / unmanagedResources / includeFilter := "*.yaml"
 
 // Publishing
 publishMavenStyle := true
@@ -50,7 +50,7 @@ publishTo := {
   else
     Some("releases"  at nexus + "service/local/staging/deploy/maven2")
 }
-publishArtifact in Test := false
+Test / publishArtifact := false
 releaseCrossBuild := true
 releasePublishArtifactsAction := PgpKeys.publishSigned.value
 
