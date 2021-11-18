@@ -65,6 +65,12 @@ version: 0.11.0
 ```
 
 ### Usage
+
+#### Note about these examples
+Instantiating Parser.default also instantiates secondary classes and reads in YAML files. This is slow.
+If performance is critical or you are handling user agents in real time, be sure not to do this on the
+critical path for processing requests.
+
 #### Retrieve data on a user-agent string
 ```scala
 import org.uaparser.scala.Parser
