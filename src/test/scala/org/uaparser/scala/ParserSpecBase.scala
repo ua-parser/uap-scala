@@ -124,19 +124,19 @@ trait ParserSpecBase extends Specification {
 
     "properly parse user agents" >> {
       List("/tests/test_ua.yaml", "/test_resources/firefox_user_agent_strings.yaml",
-        "/test_resources/pgts_browser_list.yaml").map { file =>
+        "/test_resources/pgts_browser_list.yaml").flatMap { file =>
         readCasesConfig(file).map { c =>
           parser.parse(c("user_agent_string")).userAgent must beEqualTo(UserAgent.fromMap(c).get)
         }
-      }.flatten
+      }
     }
 
     "properly parse os" >> {
-      List("/tests/test_os.yaml", "/test_resources/additional_os_tests.yaml").map { file =>
+      List("/tests/test_os.yaml", "/test_resources/additional_os_tests.yaml").flatMap { file =>
         readCasesConfig(file).map { c =>
           parser.parse(c("user_agent_string")).os must beEqualTo(OS.fromMap(c).get)
         }
-      }.flatten
+      }
     }
     "properly parse device" >> {
       readCasesConfig("/tests/test_device.yaml").map { c =>
