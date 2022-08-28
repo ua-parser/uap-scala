@@ -5,7 +5,10 @@ scalacOptions ++= Seq(
   "-deprecation",
   "-encoding", "UTF-8",
   "-feature",
-  "-unchecked",
+  "-unchecked"
+)
+
+val scala2Flags = Seq(
   "-Ywarn-dead-code",
   "-Ywarn-numeric-widen",
   "-Xfuture"
@@ -13,26 +16,37 @@ scalacOptions ++= Seq(
 
 scalacOptions := {
     CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((3, _)) =>
+        scalacOptions.value :+ "-language:implicitConversions"
       case Some((2, scalaMajor)) if scalaMajor >= 11 =>
-        scalacOptions.value :+ "-Xlint:adapted-args"
+        scalacOptions.value ++ scala2Flags :+ "-Xlint:adapted-args"
       case _ =>
-        scalacOptions.value :+ "-Yno-adapted-args"
+        scalacOptions.value ++ scala2Flags :+ "-Yno-adapted-args"
     }
-  }
+}
 
-scalaVersion := "2.12.13"
-crossScalaVersions := Seq("2.10.7", "2.11.12", "2.12.15", "2.13.6")
+scalaVersion := "2.13.8"
+crossScalaVersions := Seq("2.10.7", "2.11.12", "2.12.15", "2.13.8", "3.1.1")
 
 libraryDependencies +=  "org.yaml" % "snakeyaml" % "1.30"
 
 libraryDependencies := {
   CrossVersion.partialVersion(scalaVersion.value) match {
+    case Some((3, _)) =>
+      libraryDependencies.value ++ Seq("org.specs2" %% "specs2-core" % "5.0.0-RC-22" % "test")
     case Some((2, scalaMajor)) if scalaMajor >= 11 =>
       libraryDependencies.value ++ Seq("org.specs2" %% "specs2-core" % "4.10.6" % "test")
     case _ =>
       libraryDependencies.value ++ Seq("org.specs2" %% "specs2-core" % "3.10.0" % "test")
     }
   }
+
+coverageEnabled := {
+  CrossVersion.partialVersion(scalaVersion.value) match {
+    case Some((2, scalaMajor)) if scalaMajor <= 11  => false // The 2.x version doesn't support Scala 2.10 and 2.11
+    case _                                          => true
+  }
+}
 
 mimaPreviousArtifacts := Set("org.uaparser" %% "uap-scala" % "0.3.0")
 
