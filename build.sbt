@@ -41,13 +41,6 @@ libraryDependencies := {
     }
   }
 
-coverageEnabled := {
-  CrossVersion.partialVersion(scalaVersion.value) match {
-    case Some((2, scalaMajor)) if scalaMajor <= 11  => false // The 2.x version doesn't support Scala 2.10 and 2.11
-    case _                                          => true
-  }
-}
-
 mimaPreviousArtifacts := Set("org.uaparser" %% "uap-scala" % "0.3.0")
 
 Compile / unmanagedResourceDirectories += baseDirectory.value / "core"
