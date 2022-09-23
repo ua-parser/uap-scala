@@ -1,10 +1,11 @@
 package org.uaparser.scala
 
 import org.specs2.mutable.Specification
-import org.yaml.snakeyaml.Yaml
-import java.io.{ ByteArrayInputStream, InputStream }
+import org.yaml.snakeyaml.{LoaderOptions, Yaml}
+import java.io.{ByteArrayInputStream, InputStream}
 import java.nio.charset.StandardCharsets
-import java.util.{ Map => JMap, List => JList}
+import java.util.{List => JList, Map => JMap}
+
 import scala.collection.JavaConverters._
 
 trait ParserSpecBase extends Specification {
@@ -14,7 +15,12 @@ trait ParserSpecBase extends Specification {
   def createFromStream(stream: InputStream): UserAgentStringParser
 
   "Parser should" >> {
-    val yaml = new Yaml()
+    val yaml = {
+      val maxFileSizeBytes = 5 * 1024 * 1024 // 5 MB
+      val loaderOptions = new LoaderOptions()
+      loaderOptions.setCodePointLimit(maxFileSizeBytes)
+      new Yaml(loaderOptions)
+    }
 
     def readCasesConfig(resource: String): List[Map[String, String]] = {
       val stream = this.getClass.getResourceAsStream(resource)
