@@ -2,7 +2,6 @@ package org.uaparser.scala
 
 import java.io.InputStream
 import java.util.{List => JList, Map => JMap}
-
 import org.uaparser.scala.Device.DeviceParser
 import org.uaparser.scala.OS.OSParser
 import org.uaparser.scala.UserAgent.UserAgentParser
