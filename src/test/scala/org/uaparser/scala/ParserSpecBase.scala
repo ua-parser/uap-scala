@@ -24,7 +24,7 @@ trait ParserSpecBase extends Specification {
 
     def readCasesConfig(resource: String): List[Map[String, String]] = {
       val stream = this.getClass.getResourceAsStream(resource)
-      val cases = yaml.load(stream).asInstanceOf[JMap[String, JList[JMap[String, String]]]]
+      val cases = yaml.load[JMap[String, JList[JMap[String, String]]]](stream)
         .asScala.toMap.mapValues(_.asScala.toList.map(_.asScala.toMap))
       cases.getOrElse("test_cases", List()).filterNot(_.contains("js_ua")).map { config =>
         config.filterNot { case (_, value) => value eq null }
