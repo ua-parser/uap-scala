@@ -1,11 +1,11 @@
 package org.uaparser.scala
 
 import java.io.InputStream
-import java.util.{ List => JList, Map => JMap }
+import java.util.{List => JList, Map => JMap}
 import org.uaparser.scala.Device.DeviceParser
 import org.uaparser.scala.OS.OSParser
 import org.uaparser.scala.UserAgent.UserAgentParser
-import org.yaml.snakeyaml.Yaml
+import org.yaml.snakeyaml.{LoaderOptions, Yaml}
 import org.yaml.snakeyaml.constructor.SafeConstructor
 import scala.collection.JavaConverters._
 import scala.util.Try
@@ -18,8 +18,8 @@ case class Parser(userAgentParser: UserAgentParser, osParser: OSParser, devicePa
 
 object Parser {
   def fromInputStream(source: InputStream): Try[Parser] = Try {
-    val yaml = new Yaml(new SafeConstructor)
-    val javaConfig = yaml.load(source).asInstanceOf[JMap[String, JList[JMap[String, String]]]]
+    val yaml = new Yaml(new SafeConstructor(new LoaderOptions))
+    val javaConfig = yaml.load[JMap[String, JList[JMap[String, String]]]](source)
     val config = javaConfig.asScala.toMap.mapValues(_.asScala.toList.map(_.asScala.toMap.filterNot {
       case (_ , value) => value eq null
     }))
