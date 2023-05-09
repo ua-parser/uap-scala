@@ -48,6 +48,6 @@ object Device {
 
   object DeviceParser {
     def fromList(config: List[Map[String, String]]): DeviceParser =
-      DeviceParser(config.map(DevicePattern.fromMap).flatten)
+      DeviceParser(config.flatMap(DevicePattern.fromMap))
   }
 }

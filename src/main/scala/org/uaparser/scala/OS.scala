@@ -72,6 +72,6 @@ object OS {
   }
 
   object OSParser {
-    def fromList(config: List[Map[String, String]]): OSParser = OSParser(config.map(OSPattern.fromMap).flatten)
+    def fromList(config: List[Map[String, String]]): OSParser = OSParser(config.flatMap(OSPattern.fromMap))
   }
 }

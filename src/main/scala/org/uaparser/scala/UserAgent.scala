@@ -46,6 +46,6 @@ object UserAgent {
 
   object UserAgentParser {
     def fromList(config: List[Map[String, String]]): UserAgentParser =
-      UserAgentParser(config.map(UserAgentPattern.fromMap).flatten)
+      UserAgentParser(config.flatMap(UserAgentPattern.fromMap))
   }
 }
