@@ -28,7 +28,7 @@ scalacOptions := {
 scalaVersion := "2.13.11"
 crossScalaVersions := Seq("2.10.7", "2.11.12", "2.12.18", "2.13.11", "3.1.1")
 
-libraryDependencies +=  "org.yaml" % "snakeyaml" % "2.0"
+libraryDependencies +=  "org.yaml" % "snakeyaml" % "2.1"
 
 libraryDependencies := {
   CrossVersion.partialVersion(scalaVersion.value) match {
