@@ -6,35 +6,6 @@ uap-scala
 
 A Scala user-agent string parser based on [ua-parser/uap-core](https://github.com/ua-parser/uap-core). It extracts browser, OS and device information.
 
-### Checkout
-
-The code for this repository can be checked out normally. It uses a [git submodule](https://git-scm.com/docs/git-submodule) to include the files needed from [uap-core](https://github.com/ua-parser/uap-core) so care must be taken to make sure the `core` directory is properly checked out and initialized.
-
-Checking out the repo for the first time
-```
-git clone --recursive https://github.com/ua-parser/uap-scala.git
-```
-If uap-scala was checked out and core was not properly initialized, the following can be done
-
-```
-cd uap-scala
-git submodule update --init --recursive
-```
-
-### Build
-
-To build and publish locally for the default Scala (currently 2.13.11):
-
-```scala
-sbt publishLocal
-```
-
-To cross-build for different Scala versions:
-
-```scala
-sbt +publishLocal
-```
-
 ### Usage
 
 To use this library in your own project, add the following dependency in `build.sbt`:
@@ -77,6 +48,35 @@ println(userAgent) // UserAgent(Mobile Safari,Some(5),Some(1),None)
 
 val device = parser.deviceParser.parse(raw)
 println(device) // Device(iPhone,Some(Apple),Some(iPhone))
+```
+
+### Development
+
+The code for this repository can be checked out normally. It uses a [git submodule](https://git-scm.com/docs/git-submodule) to include the files needed from [uap-core](https://github.com/ua-parser/uap-core) so care must be taken to make sure the `core` directory is properly checked out and initialized.
+
+Checking out the repo for the first time
+```
+git clone --recursive https://github.com/ua-parser/uap-scala.git
+```
+If uap-scala was checked out and core was not properly initialized, the following can be done
+
+```
+cd uap-scala
+git submodule update --init --recursive
+```
+
+#### Build
+
+To build and publish locally for the default Scala (currently 2.13.11):
+
+```scala
+sbt publishLocal
+```
+
+To cross-build for different Scala versions:
+
+```scala
+sbt +publishLocal
 ```
 
 ### Maintainers
