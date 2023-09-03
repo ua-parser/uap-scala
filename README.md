@@ -16,7 +16,7 @@ git clone --recursive https://github.com/ua-parser/uap-scala.git
 If uap-scala was checked out and core was not properly initialized, the following can be done
 
 ```
-cd core
+cd uap-scala
 git submodule update --init --recursive
 ```
 
