@@ -21,13 +21,17 @@ git submodule update --init --recursive
 ```
 
 ### Build
-To build for the default Scala (currently 2.11):
+
+To build and publish locally for the default Scala (currently 2.13.11):
+
 ```scala
-sbt package
+sbt publishLocal
 ```
+
 To cross-build for different Scala versions:
+
 ```scala
-sbt +package
+sbt +publishLocal
 ```
 
 ### Linking
