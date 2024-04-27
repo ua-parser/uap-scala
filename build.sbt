@@ -1,3 +1,5 @@
+import ReleaseTransformations._
+
 name := "uap-scala"
 organization := "org.uaparser"
 
@@ -58,8 +60,25 @@ publishTo := {
     Some("releases"  at nexus + "service/local/staging/deploy/maven2")
 }
 Test / publishArtifact := false
+
 releaseCrossBuild := true
-releasePublishArtifactsAction := PgpKeys.publishSigned.value
+releaseTagComment := s"Release ${(ThisBuild / version).value}"
+releaseCommitMessage := s"Set version to ${(ThisBuild / version).value}"
+
+releaseProcess := Seq[ReleaseStep](
+  checkSnapshotDependencies,
+  inquireVersions,
+  runClean,
+  runTest,
+  setReleaseVersion,
+  commitReleaseVersion,
+  tagRelease,
+  releaseStepCommandAndRemaining("+publishSigned"),
+  releaseStepCommand("sonatypeBundleRelease"),
+  setNextVersion,
+  commitNextVersion,
+  pushChanges
+)
 
 pomExtra := (
   <url>https://github.com/ua-parser/uap-scala</url>
