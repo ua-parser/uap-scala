@@ -28,7 +28,7 @@ scalacOptions := {
 }
 
 scalaVersion := "2.13.13"
-crossScalaVersions := Seq("2.10.7", "2.11.12", "2.12.19", "2.13.13", "3.1.1")
+crossScalaVersions := Seq("2.12.19", "2.13.13", "3.1.1")
 
 libraryDependencies +=  "org.yaml" % "snakeyaml" % "2.2"
 
