@@ -4,6 +4,7 @@ name := "uap-scala"
 organization := "org.uaparser"
 
 scalacOptions ++= Seq(
+  "-Xfatal-warnings",
   "-deprecation",
   "-encoding", "UTF-8",
   "-feature",
@@ -13,7 +14,7 @@ scalacOptions ++= Seq(
 val scala2Flags = Seq(
   "-Ywarn-dead-code",
   "-Ywarn-numeric-widen",
-  "-Xfuture"
+  "-Ywarn-unused:imports"
 )
 
 scalacOptions := {
