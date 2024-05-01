@@ -4,7 +4,6 @@ import org.yaml.snakeyaml.{LoaderOptions, Yaml}
 import org.yaml.snakeyaml.constructor.SafeConstructor
 import java.io.InputStream
 import scala.collection.JavaConverters._
-import scala.util.Try
 import org.yaml.snakeyaml.{LoaderOptions, Yaml}
 import org.yaml.snakeyaml.constructor.SafeConstructor
 import java.util.{List => JList, Map => JMap}
