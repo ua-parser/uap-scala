@@ -1,10 +1,10 @@
 package org.uaparser.scala
 
+import java.io.InputStream
+import java.util.{List => JList, Map => JMap}
+import jdk.CollectionConverters._
 import org.yaml.snakeyaml.{LoaderOptions, Yaml}
 import org.yaml.snakeyaml.constructor.SafeConstructor
-import java.io.InputStream
-import scala.jdk.CollectionConverters._
-import java.util.{List => JList, Map => JMap}
 
 private[scala] object YamlUtil {
   def loadYamlAsMap(yamlStream: InputStream, loader: Yaml): Map[String, List[Map[String, String]]] = {
