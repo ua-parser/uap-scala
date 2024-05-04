@@ -3,6 +3,9 @@ import ReleaseTransformations._
 name := "uap-scala"
 organization := "org.uaparser"
 
+scalaVersion := "2.13.13"
+crossScalaVersions := Seq("2.12.19", "2.13.13", "3.1.1")
+
 scalacOptions ++= Seq(
   "-Xfatal-warnings",
   "-deprecation",
@@ -12,6 +15,8 @@ scalacOptions ++= Seq(
 )
 
 val scala2Flags = Seq(
+  "-Xlint:adapted-args",
+  "-Xsource:2.13.13",
   "-Ywarn-dead-code",
   "-Ywarn-numeric-widen",
   "-Ywarn-unused:imports"
@@ -21,15 +26,12 @@ scalacOptions := {
     CrossVersion.partialVersion(scalaVersion.value) match {
       case Some((3, _)) =>
         scalacOptions.value :+ "-language:implicitConversions"
-      case Some((2, scalaMajor)) if scalaMajor >= 11 =>
-        scalacOptions.value ++ scala2Flags :+ "-Xlint:adapted-args"
+      case Some((2, _)) =>
+        scalacOptions.value ++ scala2Flags
       case _ =>
-        scalacOptions.value ++ scala2Flags :+ "-Yno-adapted-args"
+        scalacOptions.value
     }
 }
-
-scalaVersion := "2.13.13"
-crossScalaVersions := Seq("2.12.19", "2.13.13", "3.1.1")
 
 libraryDependencies +=  "org.yaml" % "snakeyaml" % "2.2"
 
