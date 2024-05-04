@@ -4,9 +4,6 @@ import org.specs2.mutable.Specification
 import org.yaml.snakeyaml.{LoaderOptions, Yaml}
 import java.io.{ByteArrayInputStream, InputStream}
 import java.nio.charset.StandardCharsets
-import java.util.{List => JList, Map => JMap}
-
-import scala.collection.JavaConverters._
 
 trait ParserSpecBase extends Specification {
   sequential
@@ -24,8 +21,8 @@ trait ParserSpecBase extends Specification {
 
     def readCasesConfig(resource: String): List[Map[String, String]] = {
       val stream = this.getClass.getResourceAsStream(resource)
-      val cases = yaml.load[JMap[String, JList[JMap[String, String]]]](stream)
-        .asScala.toMap.mapValues(_.asScala.toList.map(_.asScala.toMap))
+      val cases = YamlUtil.loadYamlAsMap(stream, yaml)
+
       cases.getOrElse("test_cases", List()).filterNot(_.contains("js_ua")).map { config =>
         config.filterNot { case (_, value) => value eq null }
       }
