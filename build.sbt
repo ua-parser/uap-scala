@@ -16,7 +16,7 @@ scalacOptions ++= Seq(
 
 val scala2Flags = Seq(
   "-Xlint:adapted-args",
-  "-Xsource:2.13.13",
+  "-Xsource:3",
   "-Ywarn-dead-code",
   "-Ywarn-numeric-widen",
   "-Ywarn-unused:imports"
