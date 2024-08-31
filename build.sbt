@@ -33,7 +33,7 @@ scalacOptions := {
     }
 }
 
-libraryDependencies +=  "org.yaml" % "snakeyaml" % "2.2"
+libraryDependencies +=  "org.yaml" % "snakeyaml" % "2.3"
 
 libraryDependencies := {
   CrossVersion.partialVersion(scalaVersion.value) match {
