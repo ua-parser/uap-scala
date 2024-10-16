@@ -40,7 +40,7 @@ libraryDependencies := {
     case Some((3, _)) =>
       libraryDependencies.value ++ Seq("org.specs2" %% "specs2-core" % "5.0.7" % "test")
     case Some((2, scalaMajor)) if scalaMajor >= 11 =>
-      libraryDependencies.value ++ Seq("org.specs2" %% "specs2-core" % "4.10.6" % "test")
+      libraryDependencies.value ++ Seq("org.specs2" %% "specs2-core" % "4.20.9" % "test")
     case _ =>
       libraryDependencies.value ++ Seq("org.specs2" %% "specs2-core" % "3.10.0" % "test")
     }
