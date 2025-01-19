@@ -3,8 +3,8 @@ import ReleaseTransformations._
 name := "uap-scala"
 organization := "org.uaparser"
 
-scalaVersion := "2.13.14"
-crossScalaVersions := Seq("2.12.19", "2.13.14", "3.1.1")
+scalaVersion := "2.13.16"
+crossScalaVersions := Seq("2.12.19", "2.13.16", "3.1.1")
 
 scalacOptions ++= Seq(
   "-Xfatal-warnings",
