@@ -21,5 +21,7 @@ jobs:
           distribution: temurin
           java-version: 8
           cache: sbt
+      - name: Setup sbt
+        uses: sbt/setup-sbt@v1
       - name: Run tests
         run: sbt -v "++${{ matrix.scala-version }} clean; test; scalastyle;"
