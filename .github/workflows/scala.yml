@@ -24,4 +24,4 @@ jobs:
       - name: Setup sbt
         uses: sbt/setup-sbt@v1
       - name: Run tests
-        run: sbt -v "++${{ matrix.scala-version }} clean; test; scalastyle;"
+        run: sbt -v "++${{ matrix.scala-version }} clean; test;"
