@@ -33,6 +33,10 @@ scalacOptions := {
     }
 }
 
+// Enable scalafix
+semanticdbEnabled := true
+semanticdbVersion := scalafixSemanticdb.revision
+
 libraryDependencies +=  "org.yaml" % "snakeyaml" % "2.4"
 
 libraryDependencies := {
