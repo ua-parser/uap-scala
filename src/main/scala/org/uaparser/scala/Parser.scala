@@ -1,10 +1,12 @@
 package org.uaparser.scala
 
 import java.io.InputStream
+
+import scala.util.Try
+
 import org.uaparser.scala.Device.DeviceParser
 import org.uaparser.scala.OS.OSParser
 import org.uaparser.scala.UserAgent.UserAgentParser
-import scala.util.Try
 
 case class Parser(userAgentParser: UserAgentParser, osParser: OSParser, deviceParser: DeviceParser)
     extends UserAgentStringParser {

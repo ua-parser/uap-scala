@@ -1,9 +1,10 @@
 package org.uaparser.scala
 
-import org.specs2.mutable.Specification
-import org.yaml.snakeyaml.{LoaderOptions, Yaml}
 import java.io.{ByteArrayInputStream, InputStream}
 import java.nio.charset.StandardCharsets
+
+import org.specs2.mutable.Specification
+import org.yaml.snakeyaml.{LoaderOptions, Yaml}
 
 trait ParserSpecBase extends Specification {
   sequential
@@ -31,9 +32,17 @@ trait ParserSpecBase extends Specification {
     "parse basic ua" >> {
       val cases = List(
         "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; fr; rv:1.9.1.5) Gecko/20091102 Firefox/3.5.5 ,gzip(gfe),gzip(gfe)" ->
-          Client(UserAgent("Firefox", Some("3"), Some("5"), Some("5")), OS("Mac OS X", Some("10"), Some("4")), Device("Mac", Some("Apple"), Some("Mac"))),
+          Client(
+            UserAgent("Firefox", Some("3"), Some("5"), Some("5")),
+            OS("Mac OS X", Some("10"), Some("4")),
+            Device("Mac", Some("Apple"), Some("Mac"))
+          ),
         "Mozilla/5.0 (iPhone; CPU iPhone OS 5_1_1 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9B206 Safari/7534.48.3" ->
-          Client(UserAgent("Mobile Safari", Some("5"), Some("1")), OS("iOS", Some("5"), Some("1"), Some("1")), Device("iPhone", Some("Apple"), Some("iPhone")))
+          Client(
+            UserAgent("Mobile Safari", Some("5"), Some("1")),
+            OS("iOS", Some("5"), Some("1"), Some("1")),
+            Device("iPhone", Some("Apple"), Some("iPhone"))
+          )
       )
       cases.map { case (agent, expected) =>
         parser.parse(agent) must beEqualTo(expected)
@@ -83,7 +92,7 @@ trait ParserSpecBase extends Specification {
 
     "properly quote all user agent replacements" >> {
       val testConfig =
-         """
+        """
            |user_agent_parsers:
            |  - regex: 'ABC([\\0-9]+)'
            |    family_replacement: 'ABC ($1)'
@@ -126,8 +135,11 @@ trait ParserSpecBase extends Specification {
     }
 
     "properly parse user agents" >> {
-      List("/tests/test_ua.yaml", "/test_resources/firefox_user_agent_strings.yaml",
-        "/test_resources/pgts_browser_list.yaml").flatMap { file =>
+      List(
+        "/tests/test_ua.yaml",
+        "/test_resources/firefox_user_agent_strings.yaml",
+        "/test_resources/pgts_browser_list.yaml"
+      ).flatMap { file =>
         readCasesConfig(file).map { c =>
           parser.parse(c("user_agent_string")).userAgent must beEqualTo(UserAgent.fromMap(c).get)
         }

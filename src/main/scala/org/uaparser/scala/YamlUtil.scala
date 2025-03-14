@@ -1,16 +1,18 @@
 package org.uaparser.scala
 
 import java.io.InputStream
-import java.util.{List => JList, Map => JMap}
-import jdk.CollectionConverters._
-import org.yaml.snakeyaml.{LoaderOptions, Yaml}
+import java.util.{List as JList, Map as JMap}
+
 import org.yaml.snakeyaml.constructor.SafeConstructor
+import org.yaml.snakeyaml.{LoaderOptions, Yaml}
+
+import org.uaparser.scala.jdk.CollectionConverters.*
 
 private[scala] object YamlUtil {
   def loadYamlAsMap(yamlStream: InputStream, loader: Yaml): Map[String, List[Map[String, String]]] = {
     val javaConfig = loader.load[JMap[String, JList[JMap[String, String]]]](yamlStream)
     javaConfig.asScala.map { case (k, v) =>
-      k -> v.asScala.map(_.asScala.filter{case (_, v) => v != null}.toMap).toList
+      k -> v.asScala.map(_.asScala.filter { case (_, v) => v != null }.toMap).toList
     }.toMap
   }
 
