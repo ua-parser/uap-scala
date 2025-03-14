@@ -23,5 +23,7 @@ jobs:
           cache: sbt
       - name: Setup sbt
         uses: sbt/setup-sbt@v1
+      - name: Check formatting
+        run: sbt -v "scalafixAll --check; scalafmtCheck"
       - name: Run tests
         run: sbt -v "++${{ matrix.scala-version }} clean; test;"
