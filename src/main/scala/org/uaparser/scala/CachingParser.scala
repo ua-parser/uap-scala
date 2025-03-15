@@ -1,12 +1,14 @@
 package org.uaparser.scala
 
 import java.io.InputStream
-import java.util.{ Collections, LinkedHashMap, Map => JMap }
+import java.util
+import java.util.{Collections, Map as JMap}
+
 import scala.util.Try
 
 case class CachingParser(parser: Parser, maxEntries: Int) extends UserAgentStringParser {
   lazy val clients: JMap[String, Client] = Collections.synchronizedMap(
-    new LinkedHashMap[String, Client](maxEntries + 1, 1.0f, true) {
+    new util.LinkedHashMap[String, Client](maxEntries + 1, 1.0f, true) {
       override protected def removeEldestEntry(eldest: JMap.Entry[String, Client]): Boolean =
         super.size > maxEntries
     }
@@ -19,7 +21,7 @@ case class CachingParser(parser: Parser, maxEntries: Int) extends UserAgentStrin
 }
 
 object CachingParser {
-  val defaultCacheSize: Int = 1000
+  private val defaultCacheSize: Int = 1000
   def fromInputStream(source: InputStream, size: Int = defaultCacheSize): Try[CachingParser] =
     Parser.fromInputStream(source).map(CachingParser(_, size))
   def default(size: Int = defaultCacheSize): CachingParser = CachingParser(Parser.default, size)

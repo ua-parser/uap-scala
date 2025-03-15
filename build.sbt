@@ -1,15 +1,16 @@
 import ReleaseTransformations._
 
-name := "uap-scala"
+name         := "uap-scala"
 organization := "org.uaparser"
 
-scalaVersion := "2.13.14"
+scalaVersion       := "2.13.14"
 crossScalaVersions := Seq("2.12.20", "2.13.16", "3.3.5")
 
 scalacOptions ++= Seq(
   "-Xfatal-warnings",
   "-deprecation",
-  "-encoding", "UTF-8",
+  "-encoding",
+  "UTF-8",
   "-feature",
   "-unchecked"
 )
@@ -23,43 +24,47 @@ val scala2Flags = Seq(
 )
 
 scalacOptions := {
-    CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((3, _)) =>
-        scalacOptions.value :+ "-language:implicitConversions"
-      case Some((2, _)) =>
-        scalacOptions.value ++ scala2Flags
-      case _ =>
-        scalacOptions.value
-    }
+  CrossVersion.partialVersion(scalaVersion.value) match {
+    case Some((3, _)) =>
+      scalacOptions.value :+ "-language:implicitConversions"
+    case Some((2, _)) =>
+      scalacOptions.value ++ scala2Flags
+    case _            =>
+      scalacOptions.value
+  }
 }
 
-libraryDependencies +=  "org.yaml" % "snakeyaml" % "2.4"
+// Enable scalafix
+semanticdbEnabled := true
+semanticdbVersion := scalafixSemanticdb.revision
+
+libraryDependencies += "org.yaml" % "snakeyaml" % "2.4"
 
 libraryDependencies := {
   CrossVersion.partialVersion(scalaVersion.value) match {
-    case Some((3, _)) =>
+    case Some((3, _))                              =>
       libraryDependencies.value ++ Seq("org.specs2" %% "specs2-core" % "5.5.8" % "test")
     case Some((2, scalaMajor)) if scalaMajor >= 11 =>
       libraryDependencies.value ++ Seq("org.specs2" %% "specs2-core" % "4.20.9" % "test")
-    case _ =>
+    case _                                         =>
       libraryDependencies.value ++ Seq("org.specs2" %% "specs2-core" % "3.10.0" % "test")
-    }
   }
+}
 
 mimaPreviousArtifacts := Set("org.uaparser" %% "uap-scala" % "0.3.0")
 
 Compile / unmanagedResourceDirectories += baseDirectory.value / "core"
 Compile / unmanagedResources / includeFilter := "regexes.yaml"
 Test / unmanagedResourceDirectories += baseDirectory.value / "core"
-Test / unmanagedResources / includeFilter := "*.yaml"
+Test / unmanagedResources / includeFilter    := "*.yaml"
 
 // Publishing
-publishMavenStyle := true
-publishTo := sonatypePublishToBundle.value
+publishMavenStyle      := true
+publishTo              := sonatypePublishToBundle.value
 Test / publishArtifact := false
 
-releaseCrossBuild := true
-releaseTagComment := s"Release ${(ThisBuild / version).value}"
+releaseCrossBuild    := true
+releaseTagComment    := s"Release ${(ThisBuild / version).value}"
 releaseCommitMessage := s"Set version to ${(ThisBuild / version).value}"
 
 releaseProcess := Seq[ReleaseStep](
@@ -77,8 +82,7 @@ releaseProcess := Seq[ReleaseStep](
   pushChanges
 )
 
-pomExtra := (
-  <url>https://github.com/ua-parser/uap-scala</url>
+pomExtra := (<url>https://github.com/ua-parser/uap-scala</url>
   <licenses>
       <license>
         <name>WTFPL</name>
