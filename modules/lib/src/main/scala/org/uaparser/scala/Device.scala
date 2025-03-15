@@ -1,8 +1,8 @@
 package org.uaparser.scala
 
-import java.util.regex.{Matcher, Pattern}
-
 import org.uaparser.scala.MatcherOps.*
+
+import java.util.regex.{Matcher, Pattern}
 
 case class Device(family: String, brand: Option[String] = None, model: Option[String] = None)
 

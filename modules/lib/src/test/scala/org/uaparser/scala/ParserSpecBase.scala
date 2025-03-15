@@ -1,10 +1,10 @@
 package org.uaparser.scala
 
-import java.io.{ByteArrayInputStream, InputStream}
-import java.nio.charset.StandardCharsets
-
 import org.specs2.mutable.Specification
 import org.yaml.snakeyaml.{LoaderOptions, Yaml}
+
+import java.io.{ByteArrayInputStream, InputStream}
+import java.nio.charset.StandardCharsets
 
 trait ParserSpecBase extends Specification {
 

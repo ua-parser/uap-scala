@@ -1,12 +1,7 @@
-import ReleaseTransformations._
+import ReleaseTransformations.*
+import sbt.Keys.organization
 
-name         := "uap-scala"
-organization := "org.uaparser"
-
-scalaVersion       := "2.13.14"
-crossScalaVersions := Seq("2.12.20", "2.13.16", "3.3.5")
-
-scalacOptions ++= Seq(
+val commonScalacOptions = Seq(
   "-Xfatal-warnings",
   "-deprecation",
   "-encoding",
@@ -15,7 +10,7 @@ scalacOptions ++= Seq(
   "-unchecked"
 )
 
-val scala2Flags = Seq(
+val scalac2Flags = Seq(
   "-Xlint:adapted-args",
   "-Xsource:3",
   "-Ywarn-dead-code",
@@ -23,72 +18,77 @@ val scala2Flags = Seq(
   "-Ywarn-unused:imports"
 )
 
-scalacOptions := {
-  CrossVersion.partialVersion(scalaVersion.value) match {
-    case Some((3, _)) =>
-      scalacOptions.value :+ "-language:implicitConversions"
-    case Some((2, _)) =>
-      scalacOptions.value ++ scala2Flags
-    case _            =>
-      scalacOptions.value
-  }
-}
-
-// Enable scalafix
-semanticdbEnabled := true
-semanticdbVersion := scalafixSemanticdb.revision
-
-libraryDependencies += "org.yaml" % "snakeyaml" % "2.4"
-
-libraryDependencies := {
-  CrossVersion.partialVersion(scalaVersion.value) match {
-    case Some((3, _))                              =>
-      libraryDependencies.value ++ Seq("org.specs2" %% "specs2-core" % "5.5.8" % "test")
-    case Some((2, scalaMajor)) if scalaMajor >= 11 =>
-      libraryDependencies.value ++ Seq("org.specs2" %% "specs2-core" % "4.21.0" % "test")
-    case _                                         =>
-      libraryDependencies.value ++ Seq("org.specs2" %% "specs2-core" % "3.10.0" % "test")
-  }
-}
-
-mimaPreviousArtifacts := Set("org.uaparser" %% "uap-scala" % "0.3.0")
-
-Compile / unmanagedResourceDirectories += baseDirectory.value / "core"
-Compile / unmanagedResources / includeFilter := "regexes.yaml"
-Test / unmanagedResourceDirectories += baseDirectory.value / "core"
-Test / unmanagedResources / includeFilter    := "*.yaml"
-
-// Publishing
-publishMavenStyle      := true
-publishTo              := sonatypePublishToBundle.value
-Test / publishArtifact := false
-
-releaseCrossBuild    := true
-releaseTagComment    := s"Release ${(ThisBuild / version).value}"
-releaseCommitMessage := s"Set version to ${(ThisBuild / version).value}"
-
-releaseProcess := Seq[ReleaseStep](
-  checkSnapshotDependencies,
-  inquireVersions,
-  runClean,
-  runTest,
-  setReleaseVersion,
-  commitReleaseVersion,
-  tagRelease,
-  releaseStepCommandAndRemaining("+publishSigned"),
-  releaseStepCommand("sonatypeBundleRelease"),
-  setNextVersion,
-  commitNextVersion,
-  pushChanges
+lazy val commonSettings = Seq(
+  scalaVersion       := "2.13.14",
+  crossScalaVersions := Seq("2.12.20", "2.13.16", "3.3.5"),
+  scalacOptions      := {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((3, _)) =>
+        commonScalacOptions :+ "-language:implicitConversions"
+      case Some((2, _)) =>
+        commonScalacOptions ++ scalac2Flags
+      case _            =>
+        commonScalacOptions
+    }
+  },
+  // Enable scalafix
+  semanticdbEnabled  := true,
+  semanticdbVersion  := scalafixSemanticdb.revision
 )
 
-pomExtra := (<url>https://github.com/ua-parser/uap-scala</url>
+lazy val lib = project
+  .in(file("modules/lib"))
+  .settings(commonSettings *)
+  .settings(
+    name                  := "uap-scala",
+    organization          := "org.uaparser",
+    libraryDependencies ++= Seq(
+      "org.yaml" % "snakeyaml" % "2.4",
+      CrossVersion.partialVersion(scalaVersion.value) match {
+        case Some((3, _))                              =>
+          "org.specs2" %% "specs2-core" % "5.5.8" % "test"
+        case Some((2, scalaMajor)) if scalaMajor >= 11 =>
+          "org.specs2" %% "specs2-core" % "4.21.0" % "test"
+        case _                                         =>
+          "org.specs2" %% "specs2-core" % "3.10.0" % "test"
+      }
+    ),
+    mimaPreviousArtifacts := Set("org.uaparser" %% "uap-scala" % "0.3.0"),
+
+    // make sure we include necessary uap-core files
+    Compile / unmanagedResourceDirectories += (ThisBuild / baseDirectory).value / "core",
+    Compile / unmanagedResources / includeFilter := "regexes.yaml",
+    Test / unmanagedResourceDirectories += (ThisBuild / baseDirectory).value / "core",
+    Test / unmanagedResources / includeFilter    := "*.yaml",
+
+    // Publishing
+    publishMavenStyle      := true,
+    publishTo              := sonatypePublishToBundle.value,
+    Test / publishArtifact := false,
+    releaseCrossBuild      := true,
+    releaseTagComment      := s"Release ${(ThisBuild / version).value}",
+    releaseCommitMessage   := s"Set version to ${(ThisBuild / version).value}",
+    releaseProcess         := Seq[ReleaseStep](
+      checkSnapshotDependencies,
+      inquireVersions,
+      runClean,
+      runTest,
+      setReleaseVersion,
+      commitReleaseVersion,
+      tagRelease,
+      releaseStepCommandAndRemaining("+publishSigned"),
+      releaseStepCommand("sonatypeBundleRelease"),
+      setNextVersion,
+      commitNextVersion,
+      pushChanges
+    ),
+    pomExtra               := (<url>https://github.com/ua-parser/uap-scala</url>
   <licenses>
-      <license>
-        <name>WTFPL</name>
-        <url>http://www.wtfpl.net/about</url>
-        <distribution>repo</distribution>
-      </license>
+    <license>
+      <name>WTFPL</name>
+      <url>http://www.wtfpl.net/about</url>
+      <distribution>repo</distribution>
+    </license>
   </licenses>
   <scm>
     <url>git@github.com:ua-parser/uap-scala.git</url>
@@ -116,3 +116,19 @@ pomExtra := (<url>https://github.com/ua-parser/uap-scala</url>
       <url>https://twitter.com/phuc89</url>
     </developer>
   </developers>)
+  )
+
+lazy val benchmark = project
+  .in(file("modules/benchmark"))
+  .settings(commonSettings *)
+  .dependsOn(lib)
+  .enablePlugins(JmhPlugin)
+  .settings(
+    name                  := "uap-scala-benchmark",
+    Jmh / run / mainClass := Some("org.uaparser.scala.benchmark.Main"),
+    publish / skip        := true
+  )
+
+// do not cross build or publish the aggregating root
+crossScalaVersions := Nil
+publish / skip := true

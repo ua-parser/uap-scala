@@ -3,7 +3,6 @@ package org.uaparser.scala
 import java.io.InputStream
 import java.util
 import java.util.{Collections, Map as JMap}
-
 import scala.util.Try
 
 case class CachingParser(parser: Parser, maxEntries: Int) extends UserAgentStringParser {
