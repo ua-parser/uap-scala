@@ -1,5 +1,4 @@
 import ReleaseTransformations.*
-import sbt.Keys.organization
 
 val commonScalacOptions = Seq(
   "-Xfatal-warnings",
