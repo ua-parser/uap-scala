@@ -6,7 +6,6 @@ import java.io.{ByteArrayInputStream, InputStream}
 import java.nio.charset.StandardCharsets
 
 trait ParserSpecBase extends Specification {
-  sequential
 
   val parser: UserAgentStringParser
   def createFromStream(stream: InputStream): UserAgentStringParser
@@ -127,7 +126,7 @@ trait ParserSpecBase extends Specification {
 
     "properly parse user agents" >> {
       List("/tests/test_ua.yaml", "/test_resources/firefox_user_agent_strings.yaml",
-        "/test_resources/pgts_browser_list.yaml").flatMap { file =>
+        "/test_resources/pgts_browser_list.yaml", "/test_resources/opera_mini_user_agent_strings.yaml", "/test_resources/podcasting_user_agent_strings.yaml").flatMap { file =>
         readCasesConfig(file).map { c =>
           parser.parse(c("user_agent_string")).userAgent must beEqualTo(UserAgent.fromMap(c).get)
         }
