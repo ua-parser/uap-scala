@@ -4,7 +4,7 @@ name := "uap-scala"
 organization := "org.uaparser"
 
 scalaVersion := "2.13.14"
-crossScalaVersions := Seq("2.12.20", "2.13.16", "3.1.1")
+crossScalaVersions := Seq("2.12.20", "2.13.16", "3.3.5")
 
 scalacOptions ++= Seq(
   "-Xfatal-warnings",
@@ -38,7 +38,7 @@ libraryDependencies +=  "org.yaml" % "snakeyaml" % "2.4"
 libraryDependencies := {
   CrossVersion.partialVersion(scalaVersion.value) match {
     case Some((3, _)) =>
-      libraryDependencies.value ++ Seq("org.specs2" %% "specs2-core" % "5.0.7" % "test")
+      libraryDependencies.value ++ Seq("org.specs2" %% "specs2-core" % "5.5.8" % "test")
     case Some((2, scalaMajor)) if scalaMajor >= 11 =>
       libraryDependencies.value ++ Seq("org.specs2" %% "specs2-core" % "4.20.9" % "test")
     case _ =>
