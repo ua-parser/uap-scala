@@ -7,7 +7,6 @@ import org.specs2.mutable.Specification
 import org.yaml.snakeyaml.{LoaderOptions, Yaml}
 
 trait ParserSpecBase extends Specification {
-  sequential
 
   val parser: UserAgentStringParser
   def createFromStream(stream: InputStream): UserAgentStringParser
@@ -138,7 +137,9 @@ trait ParserSpecBase extends Specification {
       List(
         "/tests/test_ua.yaml",
         "/test_resources/firefox_user_agent_strings.yaml",
-        "/test_resources/pgts_browser_list.yaml"
+        "/test_resources/pgts_browser_list.yaml",
+        "/test_resources/opera_mini_user_agent_strings.yaml",
+        "/test_resources/podcasting_user_agent_strings.yaml"
       ).flatMap { file =>
         readCasesConfig(file).map { c =>
           parser.parse(c("user_agent_string")).userAgent must beEqualTo(UserAgent.fromMap(c).get)
