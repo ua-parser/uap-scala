@@ -130,4 +130,4 @@ lazy val benchmark = project
 
 // do not cross build or publish the aggregating root
 crossScalaVersions := Nil
-publish / skip := true
+publish / skip     := true
