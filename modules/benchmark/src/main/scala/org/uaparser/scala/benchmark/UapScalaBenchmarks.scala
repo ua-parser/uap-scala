@@ -1,57 +1,69 @@
 package org.uaparser.scala.benchmark
 
-import org.openjdk.jmh.annotations.{Benchmark, Scope, Setup, State}
+import scala.io.Source
+
+import org.openjdk.jmh.annotations.{Benchmark, Scope, State}
+
 import org.uaparser.scala.Parser
 
 @State(Scope.Benchmark)
 class UapScalaBenchmarks {
-  val smallUserAgentString = "Ice"
-  val bigUserAgentString = """Mozilla/5.0 (Windows; Windows NT 6.1; WOW64; rv:2.0b8pre; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729; MS-RTC LM 8; OfficeLiveConnector.1.4; OfficeLivePatch.1.3; SLCC1; SLCC2; Media Center PC 6.0; GTB6.4; InfoPath.2; en-US; FunWebProducts; Zango 10.1.181.0; SV1; PRTG Network Monitor (www.paessler.com)) Gecko/20101114 Firefox/4.0b8pre QuickTime/7.6.2 Songbird/1.1.2 Web-sniffer/1.0.36 lftp/3.7.4 libwww-perl/5.820 GSiteCrawler/v1.12 rev. 260 Snoopy v1.2"""
 
-  var parser: Parser = _
+  // These agents were chosen because they correspond to valid agents that get evaluated by the last regex defined
+  // in the current yaml file in the resources folder. So, they should take the most time to evaluate.
+  val userAgentSingleTest =
+    """Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0) Gecko/20100101 MullvadBrowser/102.13.0"""
+  val osSingleTest =
+    """Mozilla/5.0 (TAS-AL00 Build/HUAWEITAS-AL00; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/97.0.4692.98 Mobile Safari/537.36 T7/13.76 BDOS/1.0 (HarmonyOS 3.0.0) SP-engine/3.17.0 baiduboxapp/13.76.0.10 (Baidu; P1 12) NABar/1.0"""
+  val deviceSingleTest =
+    """Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.5 Safari/605.1.15"""
 
-  @Setup
-  def prepare(): Unit = {
-    parser = Parser.default
+  // This is somewhere in the middle for all regexes.
+  val allSingleTest = "(C)NokiaNXX/SymbianOS/9.1 Series60/3.0"
+
+  // an entire bundle of strings taken from the current suite of tests
+  var allUserAgentStrings: List[String] = Source.fromResource("all-user-agents.txt").getLines().toList
+
+  var parser: Parser =
+    Parser.fromInputStream(Thread.currentThread.getContextClassLoader.getResourceAsStream("regexes_@7388149c.yaml")).get
+
+  @Benchmark
+  def measureSingleStrDeviceParser(): Unit = {
+    parser.deviceParser.parse(deviceSingleTest)
   }
 
   @Benchmark
-  def measureBigDeviceParser(): Unit = {
-    parser.deviceParser.parse(bigUserAgentString)
+  def measureSingleStrOsParser(): Unit = {
+    parser.osParser.parse(osSingleTest)
   }
 
   @Benchmark
-  def measureBigOsParser(): Unit = {
-    parser.osParser.parse(bigUserAgentString)
+  def measureSingleStrUserAgentParser(): Unit = {
+    parser.userAgentParser.parse(userAgentSingleTest)
   }
 
   @Benchmark
-  def measureBigUserAgentParser(): Unit = {
-    parser.userAgentParser.parse(bigUserAgentString)
+  def measureSingleStrAllParser(): Unit = {
+    parser.parse(allSingleTest)
   }
 
   @Benchmark
-  def measureBigAllParser(): Unit = {
-    parser.parse(bigUserAgentString)
+  def measureAllStrDeviceParser(): Unit = {
+    allUserAgentStrings.foreach(parser.deviceParser.parse)
   }
 
   @Benchmark
-  def measureSmallDeviceParser(): Unit = {
-    parser.deviceParser.parse(smallUserAgentString)
+  def measureAllStrOsParser(): Unit = {
+    allUserAgentStrings.foreach(parser.osParser.parse)
   }
 
   @Benchmark
-  def measureSmallOsParser(): Unit = {
-    parser.osParser.parse(smallUserAgentString)
+  def measureAllStrUserAgentParser(): Unit = {
+    allUserAgentStrings.foreach(parser.userAgentParser.parse)
   }
 
   @Benchmark
-  def measureSmallUserAgentParser(): Unit = {
-    parser.userAgentParser.parse(smallUserAgentString)
-  }
-
-  @Benchmark
-  def measureSmallAllParser(): Unit = {
-    parser.parse(smallUserAgentString)
+  def measureAllStrAllParser(): Unit = {
+    allUserAgentStrings.foreach(parser.parse)
   }
 }
