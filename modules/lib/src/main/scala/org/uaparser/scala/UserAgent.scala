@@ -1,8 +1,8 @@
 package org.uaparser.scala
 
-import org.uaparser.scala.MatcherOps.*
-
 import java.util.regex.{Matcher, Pattern}
+
+import org.uaparser.scala.MatcherOps.*
 
 case class UserAgent(
     family: String,

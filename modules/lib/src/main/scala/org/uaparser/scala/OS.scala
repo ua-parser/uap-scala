@@ -1,9 +1,10 @@
 package org.uaparser.scala
 
-import org.uaparser.scala.MatcherOps.*
-
 import java.util.regex.{Matcher, Pattern}
+
 import scala.util.control.Exception.allCatch
+
+import org.uaparser.scala.MatcherOps.*
 
 case class OS(
     family: String,
