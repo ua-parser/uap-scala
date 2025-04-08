@@ -43,7 +43,7 @@ libraryDependencies += "org.yaml" % "snakeyaml" % "2.4"
 libraryDependencies := {
   CrossVersion.partialVersion(scalaVersion.value) match {
     case Some((3, _))                              =>
-      libraryDependencies.value ++ Seq("org.specs2" %% "specs2-core" % "5.5.8" % "test")
+      libraryDependencies.value ++ Seq("org.specs2" %% "specs2-core" % "5.6.0" % "test")
     case Some((2, scalaMajor)) if scalaMajor >= 11 =>
       libraryDependencies.value ++ Seq("org.specs2" %% "specs2-core" % "4.21.0" % "test")
     case _                                         =>
