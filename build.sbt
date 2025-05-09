@@ -4,7 +4,7 @@ name         := "uap-scala"
 organization := "org.uaparser"
 
 scalaVersion       := "2.13.14"
-crossScalaVersions := Seq("2.12.20", "2.13.16", "3.3.5")
+crossScalaVersions := Seq("2.12.20", "2.13.16", "3.3.6")
 
 scalacOptions ++= Seq(
   "-Xfatal-warnings",
