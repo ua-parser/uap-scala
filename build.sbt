@@ -19,7 +19,7 @@ val scalac2Flags = Seq(
 
 lazy val commonSettings = Seq(
   scalaVersion       := "2.13.14",
-  crossScalaVersions := Seq("2.12.20", "2.13.16", "3.3.5"),
+  crossScalaVersions := Seq("2.12.20", "2.13.16", "3.3.6"),
   scalacOptions      := {
     CrossVersion.partialVersion(scalaVersion.value) match {
       case Some((3, _)) =>
@@ -45,7 +45,7 @@ lazy val lib = project
       "org.yaml" % "snakeyaml" % "2.4",
       CrossVersion.partialVersion(scalaVersion.value) match {
         case Some((3, _))                              =>
-          "org.specs2" %% "specs2-core" % "5.5.8" % "test"
+          "org.specs2" %% "specs2-core" % "5.6.3" % "test"
         case Some((2, scalaMajor)) if scalaMajor >= 11 =>
           "org.specs2" %% "specs2-core" % "4.21.0" % "test"
         case _                                         =>
