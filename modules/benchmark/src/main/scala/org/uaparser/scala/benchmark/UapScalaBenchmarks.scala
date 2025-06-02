@@ -22,7 +22,7 @@ class UapScalaBenchmarks {
   val allSingleTest = "(C)NokiaNXX/SymbianOS/9.1 Series60/3.0"
 
   // an entire bundle of strings taken from the current suite of tests
-  var allUserAgentStrings: List[String] = Source.fromResource("all-user-agents.txt").getLines().toList
+  val allUserAgentStrings: List[String] = Source.fromResource("all-user-agents.txt").getLines().toList
 
   var parser: Parser =
     Parser.fromInputStream(Thread.currentThread.getContextClassLoader.getResourceAsStream("regexes_@7388149c.yaml")).get
