@@ -12,7 +12,7 @@ trait ParserSpecBase extends Specification {
   def createFromStream(stream: InputStream): UserAgentStringParser
 
   "Parser should" >> {
-    val yaml = {
+    def yaml() = {
       val maxFileSizeBytes = 5 * 1024 * 1024 // 5 MB
       val loaderOptions = new LoaderOptions()
       loaderOptions.setCodePointLimit(maxFileSizeBytes)
@@ -21,7 +21,7 @@ trait ParserSpecBase extends Specification {
 
     def readCasesConfig(resource: String): List[Map[String, String]] = {
       val stream = this.getClass.getResourceAsStream(resource)
-      val cases = YamlUtil.loadYamlAsMap(stream, yaml)
+      val cases = YamlUtil.loadYamlAsMap(stream, yaml())
 
       cases.getOrElse("test_cases", List()).filterNot(_.contains("js_ua")).map { config =>
         config.filterNot { case (_, value) => value eq null }
