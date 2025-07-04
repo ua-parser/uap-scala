@@ -59,33 +59,45 @@ lazy val lib = project
     Compile / unmanagedResources / includeFilter := "regexes.yaml",
     Test / unmanagedResourceDirectories += (ThisBuild / baseDirectory).value / "core",
     Test / unmanagedResources / includeFilter    := "*.yaml",
-
-    // Publishing
-    publishMavenStyle      := true,
-    publishTo              := {
+    Test / publishArtifact                       := false,
+    publishMavenStyle                            := true,
+    publishTo                                    := {
       val centralSnapshots = "https://central.sonatype.com/repository/maven-snapshots/"
       if (isSnapshot.value) Some("central-snapshots" at centralSnapshots)
       else localStaging.value
-    },
-    Test / publishArtifact := false,
-    releaseCrossBuild      := true,
-    releaseTagComment      := s"Release ${(ThisBuild / version).value}",
-    releaseCommitMessage   := s"Set version to ${(ThisBuild / version).value}",
-    releaseProcess         := Seq[ReleaseStep](
-      checkSnapshotDependencies,
-      inquireVersions,
-      runClean,
-      runTest,
-      setReleaseVersion,
-      commitReleaseVersion,
-      tagRelease,
-      releaseStepCommandAndRemaining("+publishSigned"),
-      releaseStepCommand("sonaRelease"),
-      setNextVersion,
-      commitNextVersion,
-      pushChanges
-    ),
-    pomExtra               := (<url>https://github.com/ua-parser/uap-scala</url>
+    }
+  )
+
+lazy val benchmark = project
+  .in(file("modules/benchmark"))
+  .settings(commonSettings *)
+  .dependsOn(lib)
+  .enablePlugins(JmhPlugin)
+  .settings(
+    name                  := "uap-scala-benchmark",
+    Jmh / run / mainClass := Some("org.uaparser.scala.benchmark.Main"),
+    publish / skip        := true
+  )
+
+// Publishing settings
+releaseCrossBuild    := true
+releaseTagComment    := s"Release ${(ThisBuild / version).value}"
+releaseCommitMessage := s"Set version to ${(ThisBuild / version).value}"
+releaseProcess       := Seq[ReleaseStep](
+  checkSnapshotDependencies,
+  inquireVersions,
+  runClean,
+  runTest,
+  setReleaseVersion,
+  commitReleaseVersion,
+  tagRelease,
+  releaseStepCommandAndRemaining("+publishSigned"),
+  releaseStepCommand("sonaRelease"),
+  setNextVersion,
+  commitNextVersion,
+  pushChanges
+)
+ThisBuild / pomExtra := (<url>https://github.com/ua-parser/uap-scala</url>
   <licenses>
     <license>
       <name>WTFPL</name>
@@ -119,18 +131,6 @@ lazy val lib = project
       <url>https://twitter.com/phuc89</url>
     </developer>
   </developers>)
-  )
-
-lazy val benchmark = project
-  .in(file("modules/benchmark"))
-  .settings(commonSettings *)
-  .dependsOn(lib)
-  .enablePlugins(JmhPlugin)
-  .settings(
-    name                  := "uap-scala-benchmark",
-    Jmh / run / mainClass := Some("org.uaparser.scala.benchmark.Main"),
-    publish / skip        := true
-  )
 
 // do not cross build or publish the aggregating root
 crossScalaVersions := Nil
