@@ -62,7 +62,11 @@ lazy val lib = project
 
     // Publishing
     publishMavenStyle      := true,
-    publishTo              := sonatypePublishToBundle.value,
+    publishTo              := {
+      val centralSnapshots = "https://central.sonatype.com/repository/maven-snapshots/"
+      if (isSnapshot.value) Some("central-snapshots" at centralSnapshots)
+      else localStaging.value
+    },
     Test / publishArtifact := false,
     releaseCrossBuild      := true,
     releaseTagComment      := s"Release ${(ThisBuild / version).value}",
@@ -76,7 +80,7 @@ lazy val lib = project
       commitReleaseVersion,
       tagRelease,
       releaseStepCommandAndRemaining("+publishSigned"),
-      releaseStepCommand("sonatypeBundleRelease"),
+      releaseStepCommand("sonaRelease"),
       setNextVersion,
       commitNextVersion,
       pushChanges
