@@ -1,13 +1,12 @@
 package org.uaparser.scala.benchmark
 
-import scala.io.Source
-
 import org.openjdk.jmh.annotations.{Benchmark, Scope, State}
+import org.openjdk.jmh.infra.Blackhole
 
 import org.uaparser.scala.Parser
 
 @State(Scope.Benchmark)
-class UapScalaBenchmarks {
+class UapScalaSingleBenchmarks {
 
   // These agents were chosen because they correspond to valid agents that get evaluated by the last regex defined
   // in the current yaml file in the resources folder. So, they should take the most time to evaluate.
@@ -21,49 +20,22 @@ class UapScalaBenchmarks {
   // This is somewhere in the middle for all regexes.
   val allSingleTest = "(C)NokiaNXX/SymbianOS/9.1 Series60/3.0"
 
-  // an entire bundle of strings taken from the current suite of tests
-  val allUserAgentStrings: List[String] = Source.fromResource("all-user-agents.txt").getLines().toList
-
   var parser: Parser =
     Parser.fromInputStream(Thread.currentThread.getContextClassLoader.getResourceAsStream("regexes_@7388149c.yaml")).get
 
   @Benchmark
-  def measureSingleStrDeviceParser(): Unit = {
-    parser.deviceParser.parse(deviceSingleTest)
-  }
+  def measureSingleStrDeviceParser(bh: Blackhole): Unit =
+    bh.consume(parser.deviceParser.parse(deviceSingleTest))
 
   @Benchmark
-  def measureSingleStrOsParser(): Unit = {
-    parser.osParser.parse(osSingleTest)
-  }
+  def measureSingleStrOsParser(bh: Blackhole): Unit =
+    bh.consume(parser.osParser.parse(osSingleTest))
 
   @Benchmark
-  def measureSingleStrUserAgentParser(): Unit = {
-    parser.userAgentParser.parse(userAgentSingleTest)
-  }
+  def measureSingleStrUserAgentParser(bh: Blackhole): Unit =
+    bh.consume(parser.userAgentParser.parse(userAgentSingleTest))
 
   @Benchmark
-  def measureSingleStrAllParser(): Unit = {
-    parser.parse(allSingleTest)
-  }
-
-  @Benchmark
-  def measureAllStrDeviceParser(): Unit = {
-    allUserAgentStrings.foreach(parser.deviceParser.parse)
-  }
-
-  @Benchmark
-  def measureAllStrOsParser(): Unit = {
-    allUserAgentStrings.foreach(parser.osParser.parse)
-  }
-
-  @Benchmark
-  def measureAllStrUserAgentParser(): Unit = {
-    allUserAgentStrings.foreach(parser.userAgentParser.parse)
-  }
-
-  @Benchmark
-  def measureAllStrAllParser(): Unit = {
-    allUserAgentStrings.foreach(parser.parse)
-  }
+  def measureSingleStrAllParser(bh: Blackhole): Unit =
+    bh.consume(parser.parse(allSingleTest))
 }
