@@ -4,10 +4,6 @@ import java.io.InputStream
 
 import scala.util.Try
 
-import org.uaparser.scala.Device.DeviceParser
-import org.uaparser.scala.OS.OSParser
-import org.uaparser.scala.UserAgent.UserAgentParser
-
 case class Parser(userAgentParser: UserAgentParser, osParser: OSParser, deviceParser: DeviceParser)
     extends UserAgentStringParser {
   def parse(agent: String): Client =
