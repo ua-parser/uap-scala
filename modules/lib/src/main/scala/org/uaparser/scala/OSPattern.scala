@@ -39,7 +39,7 @@ private object OSPattern {
   private def getBackreferenceGroup(replacement: String): Option[Int] =
     for {
       ref <- Option(replacement).filter(_.contains("$"))
-      groupOpt = allCatch opt ref.substring(1).toInt
+      groupOpt = allCatch.opt(ref.substring(1).toInt)
       group <- groupOpt
     } yield group
 
