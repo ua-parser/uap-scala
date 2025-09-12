@@ -39,7 +39,7 @@ lazy val lib = project
     name                  := "uap-scala",
     organization          := "org.uaparser",
     libraryDependencies ++= Seq(
-      "org.yaml" % "snakeyaml" % "2.4",
+      "org.yaml" % "snakeyaml" % "2.5",
       CrossVersion.partialVersion(scalaVersion.value) match {
         case Some((3, _))                              =>
           "org.specs2" %% "specs2-core" % "5.6.4" % "test"
