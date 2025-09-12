@@ -36,7 +36,7 @@ private[scala] case class OSPattern(
 private object OSPattern {
   private[this] val quotedBack1: Pattern = Pattern.compile(s"(${Pattern.quote("$1")})")
 
-  private def getBackreferenceGroup(replacement: String): Option[Int] =
+  private[this] def getBackreferenceGroup(replacement: String): Option[Int] =
     for {
       ref <- Option(replacement).filter(_.contains("$"))
       groupOpt = allCatch opt ref.substring(1).toInt
