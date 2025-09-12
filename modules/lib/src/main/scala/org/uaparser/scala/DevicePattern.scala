@@ -23,10 +23,10 @@ private[scala] case class DevicePattern(
 
   private def replace(replacement: String, matcher: Matcher): String = {
     (if (replacement.contains("$") && matcher.groupCount() >= 1) {
-       (1 to matcher.groupCount()).foldLeft(replacement)((rep, i) => {
+       (1 to matcher.groupCount()).foldLeft(replacement) { (rep, i) =>
          val toInsert = if (matcher.group(i) ne null) matcher.group(i) else ""
          rep.replaceFirst("\\$" + i, Matcher.quoteReplacement(toInsert))
-       })
+       }
      } else replacement).trim
   }
 }

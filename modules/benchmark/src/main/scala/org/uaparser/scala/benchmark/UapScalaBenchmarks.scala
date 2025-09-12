@@ -28,42 +28,34 @@ class UapScalaBenchmarks {
     Parser.fromInputStream(Thread.currentThread.getContextClassLoader.getResourceAsStream("regexes_@7388149c.yaml")).get
 
   @Benchmark
-  def measureSingleStrDeviceParser(): Unit = {
+  def measureSingleStrDeviceParser(): Unit =
     parser.deviceParser.parse(deviceSingleTest)
-  }
 
   @Benchmark
-  def measureSingleStrOsParser(): Unit = {
+  def measureSingleStrOsParser(): Unit =
     parser.osParser.parse(osSingleTest)
-  }
 
   @Benchmark
-  def measureSingleStrUserAgentParser(): Unit = {
+  def measureSingleStrUserAgentParser(): Unit =
     parser.userAgentParser.parse(userAgentSingleTest)
-  }
 
   @Benchmark
-  def measureSingleStrAllParser(): Unit = {
+  def measureSingleStrAllParser(): Unit =
     parser.parse(allSingleTest)
-  }
 
   @Benchmark
-  def measureAllStrDeviceParser(): Unit = {
+  def measureAllStrDeviceParser(): Unit =
     allUserAgentStrings.foreach(parser.deviceParser.parse)
-  }
 
   @Benchmark
-  def measureAllStrOsParser(): Unit = {
+  def measureAllStrOsParser(): Unit =
     allUserAgentStrings.foreach(parser.osParser.parse)
-  }
 
   @Benchmark
-  def measureAllStrUserAgentParser(): Unit = {
+  def measureAllStrUserAgentParser(): Unit =
     allUserAgentStrings.foreach(parser.userAgentParser.parse)
-  }
 
   @Benchmark
-  def measureAllStrAllParser(): Unit = {
+  def measureAllStrAllParser(): Unit =
     allUserAgentStrings.foreach(parser.parse)
-  }
 }

@@ -29,10 +29,7 @@ lazy val commonSettings = Seq(
       case _            =>
         commonScalacOptions
     }
-  },
-  // Enable scalafix
-  semanticdbEnabled  := true,
-  semanticdbVersion  := scalafixSemanticdb.revision
+  }
 )
 
 lazy val lib = project
