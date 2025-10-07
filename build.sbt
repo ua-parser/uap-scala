@@ -19,7 +19,7 @@ val scalac2Flags = Seq(
 
 lazy val commonSettings = Seq(
   scalaVersion       := "2.13.14",
-  crossScalaVersions := Seq("2.12.20", "2.13.16", "3.3.6"),
+  crossScalaVersions := Seq("2.12.20", "2.13.17", "3.3.6"),
   scalacOptions      := {
     CrossVersion.partialVersion(scalaVersion.value) match {
       case Some((3, _)) =>
