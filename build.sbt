@@ -47,7 +47,7 @@ lazy val lib = project
         case Some((3, _))                              =>
           "org.specs2" %% "specs2-core" % "5.6.4" % "test"
         case Some((2, scalaMajor)) if scalaMajor >= 11 =>
-          "org.specs2" %% "specs2-core" % "4.21.0" % "test"
+          "org.specs2" %% "specs2-core" % "4.23.0" % "test"
         case _                                         =>
           "org.specs2" %% "specs2-core" % "3.10.0" % "test"
       }
