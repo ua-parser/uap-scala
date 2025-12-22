@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        scala-version: [2.12.20, 2.13.18, 3.3.7]
+        scala-version: [2.12.21, 2.13.18, 3.3.7]
     steps:
       - name: Checkout repository and submodules
         uses: actions/checkout@v2
