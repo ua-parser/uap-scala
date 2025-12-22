@@ -16,7 +16,6 @@ private[scala] object YamlUtil {
     }.toMap
   }
 
-  def loadYamlAsMap(yamlStream: InputStream): Map[String, List[Map[String, String]]] = {
+  def loadYamlAsMap(yamlStream: InputStream): Map[String, List[Map[String, String]]] =
     loadYamlAsMap(yamlStream, new Yaml(new SafeConstructor(new LoaderOptions)))
-  }
 }

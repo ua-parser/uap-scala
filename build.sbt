@@ -29,10 +29,7 @@ lazy val commonSettings = Seq(
       case _            =>
         commonScalacOptions
     }
-  },
-  // Enable scalafix
-  semanticdbEnabled  := true,
-  semanticdbVersion  := scalafixSemanticdb.revision
+  }
 )
 
 lazy val lib = project
@@ -63,7 +60,7 @@ lazy val lib = project
     publishMavenStyle                            := true,
     publishTo                                    := {
       val centralSnapshots = "https://central.sonatype.com/repository/maven-snapshots/"
-      if (isSnapshot.value) Some("central-snapshots" at centralSnapshots)
+      if (isSnapshot.value) Some("central-snapshots".at(centralSnapshots))
       else localStaging.value
     }
   )
