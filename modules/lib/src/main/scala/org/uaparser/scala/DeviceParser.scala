@@ -1,15 +1,24 @@
 package org.uaparser.scala
 
 case class DeviceParser(patterns: List[DevicePattern]) {
-  def parse(agent: String): Device = patterns
-    .foldLeft[Option[Device]](None) {
-      case (None, pattern) => pattern.process(agent)
-      case (result, _)     => result
+  private val patternsArray = patterns.toArray
+  private val length = patternsArray.length
+  def parse(agent: String): Device = {
+    var i = 0
+    while (i < length) {
+      patternsArray(i).process(agent) match {
+        case Some(d) => return d
+        case None    => ()
+      }
+      i += 1
     }
-    .getOrElse(Device("Other"))
+    DeviceParser.Other
+  }
 }
 
 object DeviceParser {
+  private val Other = Device("Other")
+
   def fromList(config: List[Map[String, String]]): DeviceParser =
     DeviceParser(config.flatMap(DevicePattern.fromMap))
 }

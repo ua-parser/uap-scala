@@ -1,14 +1,22 @@
 package org.uaparser.scala
 
 case class OSParser(patterns: List[OSPattern]) {
-  def parse(agent: String): OS = patterns
-    .foldLeft[Option[OS]](None) {
-      case (None, pattern) => pattern.process(agent)
-      case (result, _)     => result
+  private val patternsArray = patterns.toArray
+  private val length = patternsArray.length
+  def parse(agent: String): OS = {
+    var i = 0
+    while (i < length) {
+      patternsArray(i).process(agent) match {
+        case Some(d) => return d
+        case None    => ()
+      }
+      i += 1
     }
-    .getOrElse(OS("Other"))
+    OSParser.Other
+  }
 }
 
 object OSParser {
+  private val Other = OS("Other")
   def fromList(config: List[Map[String, String]]): OSParser = OSParser(config.flatMap(OSPattern.fromMap))
 }
