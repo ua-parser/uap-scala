@@ -1,34 +1,47 @@
 package org.uaparser.scala.benchmark
 
-import scala.io.Source
+import java.util.concurrent.TimeUnit
 
-import org.openjdk.jmh.annotations.{Benchmark, Scope, State}
+import org.openjdk.jmh.annotations.*
 import org.openjdk.jmh.infra.Blackhole
 
 import org.uaparser.scala.Parser
 
-@State(Scope.Benchmark)
+@BenchmarkMode(Array(Mode.Throughput))
+@OutputTimeUnit(TimeUnit.SECONDS)
+@State(Scope.Thread)
 class UapScalaAllBenchmarks {
 
-  // an entire bundle of strings taken from the current suite of tests
-  val allUserAgentStrings: List[String] = Source.fromResource("all-user-agents.txt").getLines().toList
+  private var parser: Parser = _
+  private var uas: Array[String] = _
+  private var idx: Int = 0
 
-  var parser: Parser =
-    Parser.fromInputStream(Thread.currentThread.getContextClassLoader.getResourceAsStream("regexes_@7388149c.yaml")).get
+  @Setup(Level.Trial)
+  def setup(): Unit = {
+    parser = BenchmarkSupport.loadParserForPinnedRegexes()
+    uas = BenchmarkSupport.loadLinesFromResource("all-user-agents.txt")
+    idx = 0
+  }
 
-  @Benchmark
-  def measureAllStrDeviceParser(bh: Blackhole): Unit =
-    allUserAgentStrings.foreach(s => bh.consume(parser.deviceParser.parse(s)))
+  @Setup(Level.Iteration)
+  def resetCursor(): Unit =
+    idx = 0
 
-  @Benchmark
-  def measureAllStrOsParser(bh: Blackhole): Unit =
-    allUserAgentStrings.foreach(s => bh.consume(parser.osParser.parse(s)))
+  @inline private def nextUA(): String = {
+    val s = uas(idx)
+    idx = BenchmarkSupport.incrementIndex(idx, uas.length)
+    s
+  }
 
-  @Benchmark
-  def measureAllStrUserAgentParser(bh: Blackhole): Unit =
-    allUserAgentStrings.foreach(s => bh.consume(parser.userAgentParser.parse(s)))
+  @Benchmark def all_device(bh: Blackhole): Unit =
+    bh.consume(parser.deviceParser.parse(nextUA()))
 
-  @Benchmark
-  def measureAllStrAllParser(bh: Blackhole): Unit =
-    allUserAgentStrings.foreach(s => bh.consume(parser.parse(s)))
+  @Benchmark def all_os(bh: Blackhole): Unit =
+    bh.consume(parser.osParser.parse(nextUA()))
+
+  @Benchmark def all_userAgent(bh: Blackhole): Unit =
+    bh.consume(parser.userAgentParser.parse(nextUA()))
+
+  @Benchmark def all_all(bh: Blackhole): Unit =
+    bh.consume(parser.parse(nextUA()))
 }
