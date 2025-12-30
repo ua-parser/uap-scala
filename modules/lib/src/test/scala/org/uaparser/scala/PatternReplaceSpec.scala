@@ -1,6 +1,7 @@
 package org.uaparser.scala
 
 import java.util.regex.Pattern
+
 import org.specs2.mutable.Specification
 
 class PatternReplaceSpec extends Specification {

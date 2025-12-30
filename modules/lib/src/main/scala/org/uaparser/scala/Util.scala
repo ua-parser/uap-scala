@@ -9,7 +9,7 @@ private object Util {
     // No $ found, return the replacement as is
     if (firstDollarIdx < 0) return replacement.trim
 
-    val groupCount  = matcher.groupCount()
+    val groupCount = matcher.groupCount()
     val replacementLength = replacement.length
 
     val stringBuilder = new java.lang.StringBuilder(replacementLength + 128)
