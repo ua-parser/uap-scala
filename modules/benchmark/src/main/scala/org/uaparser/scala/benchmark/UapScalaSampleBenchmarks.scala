@@ -32,15 +32,15 @@ class UapScalaSampleBenchmarks {
     s
   }
 
-  @Benchmark def sample_device(bh: Blackhole): Unit =
+  @Benchmark def sampleDevice(bh: Blackhole): Unit =
     bh.consume(parser.deviceParser.parse(nextUA()))
 
-  @Benchmark def sample_os(bh: Blackhole): Unit =
+  @Benchmark def sampleOs(bh: Blackhole): Unit =
     bh.consume(parser.osParser.parse(nextUA()))
 
-  @Benchmark def sample_userAgent(bh: Blackhole): Unit =
+  @Benchmark def sampleUserAgent(bh: Blackhole): Unit =
     bh.consume(parser.userAgentParser.parse(nextUA()))
 
-  @Benchmark def sample_all(bh: Blackhole): Unit =
+  @Benchmark def sampleAll(bh: Blackhole): Unit =
     bh.consume(parser.parse(nextUA()))
 }

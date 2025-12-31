@@ -14,8 +14,13 @@ object BenchmarkSupport {
       source.close()
   }
 
-  def loadParserForPinnedRegexes(): Parser =
-    Parser.fromInputStream(getClass.getClassLoader.getResourceAsStream("regexes_@7388149c.yaml")).get
+  def loadParserForPinnedRegexes(): Parser = {
+    val inputStream = getClass.getClassLoader.getResourceAsStream("regexes_@354aebe.yaml")
+    try
+      Parser.fromInputStream(inputStream).get
+    finally
+      inputStream.close()
+  }
 
   @inline def incrementIndex(i: Int, n: Int): Int = {
     val j = i + 1

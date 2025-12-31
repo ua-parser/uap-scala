@@ -12,7 +12,7 @@ import org.uaparser.scala.Parser
 @State(Scope.Thread)
 class UapScalaSingleBenchmarks {
 
-  @Param(Array("best", "late", "noMatch"))
+  @Param(Array("early", "mid", "late", "no-match"))
   private var scenario: String = _
 
   private var parser: Parser = _
@@ -22,56 +22,62 @@ class UapScalaSingleBenchmarks {
   private var userAgentTestStr: String = _
   private var allTestStr: String = _
 
-  // things that match late in the regex list
-  private val lateUserAgent =
-    """Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0) Gecko/20100101 MullvadBrowser/102.13.0"""
+  // The following are user-agent strings selected to match early, mid, and late regexes inside the uap-core regexes.yaml definitions
+  private val earlyDevice =
+    """AdsBot-Google-Mobile (+http://www.google.com/mobile/adsbot.html) Mozilla (iPhone; U; CPU iPhone OS 3 0 like Mac OS X) AppleWebKit (KHTML, like Gecko) Mobile Safari"""
+  private val midDevice =
+    """Mozilla/5.0 (Linux; Android 4.1.1; AEON Build/JRO03H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.57 Safari/537.36 OPR/18.0.1290.66961"""
+  private val lateDevice =
+    """Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15"""
+
+  private val earlyOs =
+    """Mozilla/5.0 (Unknown; Linux armv7l) AppleWebKit/537.1+ (KHTML, like Gecko) Safari/537.1+ HbbTV/1.1.1 ( ;LGE ;NetCast 4.0 ;03.20.30 ;1.0M ;)"""
+  private val midOs = """Yelp/8.2.1 CFNetwork/705.1 Darwin/14.0.0"""
   private val lateOs =
     """Mozilla/5.0 (TAS-AL00 Build/HUAWEITAS-AL00; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/97.0.4692.98 Mobile Safari/537.36 T7/13.76 BDOS/1.0 (HarmonyOS 3.0.0) SP-engine/3.17.0 baiduboxapp/13.76.0.10 (Baidu; P1 12) NABar/1.0"""
-  private val lateDevice =
-    """Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.5 Safari/605.1.15"""
-  private val midAll =
-    "(C)NokiaNXX/SymbianOS/9.1 Series60/3.0"
 
-  // things that match early in the regex list
-  private val bestUserAgent =
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-  private val bestOs =
-    "Mozilla/5.0 (Linux; Android 13; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
-  private val bestDevice =
-    "Mozilla/5.0 (iPhone; CPU iPhone OS 16_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5 Mobile/15E148 Safari/604.1"
-  private val bestAll = bestUserAgent
+  private val earlyUserAgent = """GeoEvent Server 10.5.1"""
+  private val midUserAgent =
+    """Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 CCleaner/131.0.0.0"""
+  private val lateUserAgent =
+    """Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0) Gecko/20100101 MullvadBrowser/102.13.0"""
+
+  private val allEarly =
+    """Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5X Build/MMB29P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.6367.201 Mobile Safari/537.36 (compatible; Google-InspectionTool/1.0;)"""
+  private val allMid = """Mozilla/4.0 (compatible; MSIE 6.0; Windows CE; IEMobile 7.11) Sprint:MotoQ9c"""
+  private val allLate =
+    """Mozilla/5.0 (BB10; Touch) AppleWebKit/537.3+ (KHTML, like Gecko) Version/10.0.9.388 Mobile Safari/537.3+"""
 
   // we should have no match here
-  private val noMatch =
-    "DefinitelyNotAUserAgent/0.0 (totally; invalid) __benchmark_no_match__"
+  private val noMatch = """DefinitelyNotAUserAgent/0.0 (totally; invalid) __benchmark_no_match__"""
 
-  private def pick(best: String, late: String, mid: String): String = {
+  private def pick(early: String, mid: String, late: String): String = {
     scenario match {
-      case "best"    => best
-      case "late"    => late
-      case "noMatch" => noMatch
-      case _         => mid
+      case "early"    => early
+      case "mid"      => mid
+      case "late"     => late
+      case "no-match" => noMatch
     }
   }
 
   @Setup(Level.Trial)
   def setup(): Unit = {
     parser = BenchmarkSupport.loadParserForPinnedRegexes()
-    deviceTestStr = pick(bestDevice, lateDevice, lateDevice)
-    osTestStr = pick(bestOs, lateOs, lateOs)
-    userAgentTestStr = pick(bestUserAgent, lateUserAgent, lateUserAgent)
-    allTestStr = pick(bestAll, midAll, midAll)
+    deviceTestStr = pick(earlyDevice, midDevice, lateDevice)
+    osTestStr = pick(earlyOs, midOs, lateOs)
+    userAgentTestStr = pick(earlyUserAgent, midUserAgent, lateUserAgent)
+    allTestStr = pick(allEarly, allMid, allLate)
   }
 
-  @Benchmark def single_device(bh: Blackhole): Unit =
+  @Benchmark def singleDevice(bh: Blackhole): Unit =
     bh.consume(parser.deviceParser.parse(deviceTestStr))
 
-  @Benchmark def single_os(bh: Blackhole): Unit =
+  @Benchmark def singleOs(bh: Blackhole): Unit =
     bh.consume(parser.osParser.parse(osTestStr))
 
-  @Benchmark def single_userAgent(bh: Blackhole): Unit =
+  @Benchmark def singleUserAgent(bh: Blackhole): Unit =
     bh.consume(parser.userAgentParser.parse(userAgentTestStr))
 
-  @Benchmark def single_all(bh: Blackhole): Unit =
+  @Benchmark def singleAll(bh: Blackhole): Unit =
     bh.consume(parser.parse(allTestStr))
 }
