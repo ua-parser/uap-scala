@@ -47,8 +47,6 @@ private object OSPattern {
   private final case class FamilyLiteral(value: String) extends FamilyReplacement {
     override def render(agent: String, m: Matcher): String = value
   }
-
-  /** Replacement that may contain one or more occurrences of "$1". */
   private final case class FamilyWithGroup1(parts: Array[String]) extends FamilyReplacement {
 
     // We insert group 1 between each part.
@@ -92,7 +90,7 @@ private object OSPattern {
   private final case class VersionGroupRef(group: Int) extends VersionReplacement
 
   private def compileVersionReplacement(replacementDef: String): VersionReplacement = {
-    // Treat ONLY the whole string "$<digits>" as a group ref; otherwise literal.
+    // Treat only the whole string "$<digits>" as a group reference, otherwise it will be treated as a literal.
     if (replacementDef != null && replacementDef.length >= 2 && replacementDef.charAt(0) == '$') {
       var i = 1
       var n = 0
@@ -117,10 +115,9 @@ private object OSPattern {
       case VersionGroupRef(gr) => m.groupAt(gr)
     }
 
-  /**   - replacement is a backref and missing, fall back to the default captured group
-    *   - replacement is a literal, use it (unless empty)
-    *   - no replacement provided, use fallback captured group
-    */
+  // - replacement is a backref and missing, fall back to the default captured group
+  // - replacement is a literal, use it (unless empty)
+  // - no replacement provided, use fallback captured group
   private def resolveVersion(repOpt: Option[VersionReplacement], matcher: Matcher, fallbackGroup: Int): Option[String] =
     repOpt match {
       case Some(VersionGroupRef(gr)) => matcher.groupAt(gr).orElse(matcher.groupAt(fallbackGroup))
