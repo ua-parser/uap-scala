@@ -81,11 +81,11 @@ sbt +publishLocal
 
 ### Details about the implementation using `regexes.yaml` file
 
-This project use the 'regexes.yaml' file from [ua-parser/uap-core](https://github.com/ua-parser/uap-core/) repository to
+This project uses the 'regexes.yaml' file from [ua-parser/uap-core](https://github.com/ua-parser/uap-core/) repository to
 perform user-agent string parsing according to the [documented specification](https://github.com/ua-parser/uap-core/blob/master/docs/specification.md).
 The file is included as a git submodule in the `core` directory.
 
-Bellow, follows a summary of that same specification.
+Below, follows a summary of that same specification.
 
 #### Summary
 
@@ -164,8 +164,8 @@ Similarly, OS rules map:
 Devices are slightly different: if no replacements are given, the first match defines the device family and model, 
 and brand/model may be undefined depending on the rule and implementation.
 
-In case that no matching regex is found the value for family shall be "Other". Brand and model shall not be defined. 
-Leading and tailing whitespaces shall be trimmed from the result.
+In case no matching regex is found, the value for family shall be "Other". Brand and model shall not be defined. 
+Leading and trailing whitespaces shall be trimmed from the result.
 
 
 ### Maintainers
