@@ -5,8 +5,6 @@ import java.util.regex.Pattern
 import org.specs2.mutable.Specification
 
 class PatternReplaceSpec extends Specification {
-
-  // Helper: invoke the private `replace` method reflectively
   private def replace(replacement: String, agent: String, p: Pattern): String = {
     val m = p.matcher(agent)
     m.find() must beTrue
