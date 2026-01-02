@@ -79,6 +79,95 @@ To cross-build for different Scala versions:
 sbt +publishLocal
 ```
 
+### Details about the implementation using `regexes.yaml` file
+
+This project use the 'regexes.yaml' file from [ua-parser/uap-core](https://github.com/ua-parser/uap-core/) repository to
+perform user-agent string parsing according to the [documented specification](https://github.com/ua-parser/uap-core/blob/master/docs/specification.md).
+The file is included as a git submodule in the `core` directory.
+
+Bellow, follows a summary of that same specification.
+
+#### Summary
+
+This implementation (and others) works by applying three independent ordered rule lists to the same input user‑agent 
+string:
+
+- User agent parser ('user_agent_parsers' definitions): provides the "browser" name and version.
+- OS parser ('os_parsers' definitions): provides operating system name and version.
+- Device parser ('device_parsers'): provides device family and optional brand and model.
+
+Each list is evaluated top‑to‑bottom. The first matching regex wins, and parsing for that list stops immediately.
+
+#### Data file format
+
+At a high level, 'regexes.yaml' is a YAML map with top-level keys like:
+
+- `user_agent_parsers:`
+- `os_parsers:`
+- `device_parsers:`
+
+Each value is a YAML list. Each list item is a small map that always contains a regex and may contain `*_replacement` 
+fields.
+
+##### Examples:
+
+User agent parser example:
+```yaml
+user_agent_parsers:
+  - regex: '(Namoroka|Shiretoko|Minefield)/(\d+)\.(\d+)\.(\d+(?:pre|))'
+    family_replacement: 'Firefox ($1)'
+```
+
+OS parser example:
+```yaml
+os_parsers:
+  - regex: 'CFNetwork/.{0,100} Darwin/22\.([0-5])\.\d+'
+    os_replacement: 'iOS'
+    os_v1_replacement: '16'
+    os_v2_replacement: '$1'
+```
+
+Device parser example:
+```yaml
+device_parsers:
+  - regex: '; *(PEDI)_(PLUS)_(W) Build'
+    device_replacement: 'Odys $1 $2 $3'
+    brand_replacement: 'Odys'
+    model_replacement: '$1 $2 $3'
+```
+
+#### Capturing groups and default field mapping
+
+The spec’s core idea is to put capturing groups `(...)` in your regex to extract parts of the UA string. If you don't 
+supply replacements, fields map by group order.
+
+#### User agent default mapping
+
+If a user agent rule matches and it provides no replacements:
+- group 1: _family_
+- group 2: _major_
+- group 3: _minor_
+- group 4: _patch_
+
+#### OS default mapping
+
+Similarly, OS rules map:
+
+- group 1: _family_
+- group 2: _major_
+- group 3: _minor_
+- group 4: _patch_
+- group 5: _patchMinor_
+
+#### Device default mapping
+
+Devices are slightly different: if no replacements are given, the first match defines the device family and model, 
+and brand/model may be undefined depending on the rule and implementation.
+
+In case that no matching regex is found the value for family shall be "Other". Brand and model shall not be defined. 
+Leading and tailing whitespaces shall be trimmed from the result.
+
+
 ### Maintainers
 
 * Piotr Adamski ([@mcveat](https://twitter.com/mcveat)) (Author. Based on the java implementation by Steve Jiang [@sjiang](https://twitter.com/sjiang) and using agent data from BrowserScope)
