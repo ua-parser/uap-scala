@@ -42,7 +42,7 @@ lazy val lib = project
       "org.yaml" % "snakeyaml" % "2.6",
       CrossVersion.partialVersion(scalaVersion.value) match {
         case Some((3, _))                              =>
-          "org.specs2" %% "specs2-core" % "5.9.0" % "test"
+          "org.specs2" %% "specs2-core" % "5.9.1" % "test"
         case Some((2, scalaMajor)) if scalaMajor >= 11 =>
           "org.specs2" %% "specs2-core" % "4.23.0" % "test"
         case _                                         =>
