@@ -1,4 +1,4 @@
-addSbtPlugin("com.github.sbt"     % "sbt-pgp"         % "2.3.1")
+addSbtPlugin("com.github.sbt"     % "sbt-pgp"         % "2.3.2")
 addSbtPlugin("com.github.sbt"     % "sbt-release"     % "1.4.0")
 addSbtPlugin("com.typesafe"       % "sbt-mima-plugin" % "1.1.5")
 addSbtPlugin("org.scalameta"      % "sbt-scalafmt"    % "2.5.6")
